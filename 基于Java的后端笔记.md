@@ -371,11 +371,10 @@
     ```java
     import org.springframework.web.bind.annotation.RequestMapping;
     import org.springframework.web.bind.annotation.RestController;
-    import org.springframework.web.context.annotation.RequestScope;
     ```
     
     然后保存, 运行 (run), 和上次一样的Terminal信息说明成功, 同样在浏览器打入网址 ` localhost:8080`就可以看到代码中输出的一句话. 输出内容可以随意修改.
-
-- 代码解释 @RestController就是调用了一个REST API的控制器. @RequestMapping 就是调用了一个请求映射功能, 代码中给出的地址是"/", 代表网页的根目录或者默认的页面. 代码的意思就是服务器对于客户机根目录的请求就会运行下面的函数. 如果把"/"改成"/page", 那么想要运行下面的函数, 对应的网址就要改成 ` localhost:8080/page`. 如果在新网址能看到输出的信息, 那么工程就算运行成功.
+    
+- 代码解释 @RestController就是调用了一个REST API的控制器. @RequestMapping 就是调用了一个请求映射功能, 代码中给出的地址是"/", 代表网页的根目录或者默认的页面. 代码的意思就是服务器对于客户机根目录的请求就会运行下面的函数. 如果把"/"改成"/page", 那么想要运行下面的函数, 对应的网址就要改成 ` localhost:8080/page`. 如果在新网址能看到输出的信息, 那么工程就算运行成功. 但是现在只能在IDE中运行, 以后还涉及打包发布等.
 - 所以Spring boot就是使用一个个的@XXXX这样的标记符来引入功能, 而无需担心代码, 常见的模块都已经被配置完毕可以直接使用, 大大简化了编程.
 
