@@ -1,3 +1,7 @@
+
+
+
+
 # 基于Java的后端笔记
 
 网上大部分讲Java后端的教程都只是在讲Java语言, 如何使用各类变量和数据, 而不是真正的网页后端, 所以我记录下我的学习笔记. 
@@ -60,7 +64,7 @@
 - Java语言对大小写敏感.
 
 - 在路径 C:\Program Files\Java\jdk-17\bin 下存放了Java的几个主要程序.
-  - java.exe：这个可执行程序其实就是JVM，运行Java程序，就是启动JVM，然后让JVM执行指定的编译后的代码.
+  - java.exe：这个可执行程序其实就是JVM，运行Java程序，就是启动JVM，然后让JVM执行指定的编译后的代码. VM就是virtue machine, 虚拟机. Java所有的程序都运行在虚拟机中, 用来保证可移植性.
   - javac.exe：这是Java的编译器compiler，它用于把Java源码文件 (以`.java`后缀结尾) 编译为Java字节码文件 (以`.class`后缀结尾).
   - jar.exe：用于把一组`.class`文件打包成一个`.jar`文件，便于发布.
   - jdb：Java调试器 debugger，用于开发阶段的运行调试.
@@ -204,7 +208,10 @@
 ## Maven的使用
 
 - Maven解决的问题是一个Java工程, 在不同的电脑上编译出来结果不一样. 一般行业内的做法是在需要部署的服务器上编译, 运行. 这样出问题的概率最小. 这个过程中需要管理很多随之而来的文件打包和配套软件和组件版本问题, 这时Maven只用一个pom.xml 配置文件来记录管理一切项目信息就要容易得多. 对于Java来说, 服务器上并没有图形界面的IDE, 如何编译? 最后全部需要命令行, 手动或者只用脚本来编译都是不够直观而且麻烦的. 那么由Maven就可以一键生成项目需要的输出. Maven还提供了一种标准化的项目文件结构, 让你的项目结构直接与业内标准相同.
+
 - Maven的本质是将整个项目当成一个object来对待, 使用这个项目就是创建这个项目的一个class. 他的目的就是解决 Java 工程复杂的组件依赖和自动编译打包. 除了项目配置信息, 依赖管理的资源都来自中央服务器. 所以构建时必须有网络.
+
+### Maven的测试工程
 
 - 新建一个放置工程的文件夹, 并且在文件夹位置打开控制台, 执行命令: ` mvn archetype:generate `, 然后程序会让你选择一个工程的模板, 直接按回车接受默认1823或者再单独选一个输入都可以(我选了747, 一个默认的Java工程), 程序会开始下载一系列文件, 如果还有选项按照提示操作即可. 然后要求你给出groupId(公司名), 随便起名字. 然后会问artifactId(程序的名字),随便起. 然后问你版本号, 随便起, 最后是package, 暂时随便起. 然后按y确认. 然后就会构建一个新的空白工程文件夹.
 
@@ -273,4 +280,102 @@
   - 都完成后再执行 ` mvn package`这次构建出来的jar文件终于可以成功执行. 不仅在这台电脑能执行, 应该在任意电脑都可以执行.(当然要有Java)
   
   - 我已经大概了解工程的构建方式, 就是按照某个模板建立一些文件夹, 然后去pom文件里面设置好一系列参数, 写好源代码文件, 然后用Maven命令打包导出 jar 压缩包就可以在任意电脑上执行了.  我第一次运行不成功可能是其中有些默认设置并不契合我电脑的情况, 换了一个构建模板就好了.
+  
+### POM的使用
+
+- Maven使用pom.xml文件来定位和管理所有的文件包, 以下一个例子是其中一个文件包的代码:
+
+	```xml
+	<dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <version>1.4.2.RELEASE</version>
+      <scope>test</scope>
+	</dependency>
+	```
+	
+	dependency说明了字段的性质, 是一个项目的依赖(包). groupId是发布这个包的公司或机构的名称. artifactId是具体的产品名字, version即为版本号, 带有RELEASE字样说明是发布的最终版本. 还有可能是BETA或者SNAPSHOT版本, 意为开发中的版本. 此段代码请求了一个spring-boot-starter-web的包, Maven会自动分析这个包需要的另外多个包并会自动下载.
+	
+- Maven的依赖管理还有个字段 ` <scope>test</scope>`, 其中的值有可能是compile, test, runtime, provided. 顾名思义, 它指明了这个包在什么阶段会被用到, 分别是编译时用到, 测试时用到, 运行时用到, 编译时用到但运行时由其他地方提供.
+
+- Maven维护了一个中央的仓库, 管理所有的包可供下载. 一旦被下载过, 这个包就会在本地缓存.
+
+- 如果官方仓库下载缓慢, 可以使用镜像仓库. 方法是, 在用户主目录下的.m2文件夹创建settings.xml文件, 写入以下代码添加一个国内的镜像仓库:
+
+	 ```xml
+  <settings>
+      <mirrors>
+          <mirror>
+              <id>aliyun</id>
+              <name>aliyun</name>
+              <mirrorOf>central</mirrorOf>
+              <url>https://maven.aliyun.com/repository/central</url>
+          </mirror>
+      </mirrors>
+  </settings>
+  ```
+  
+- 如果需要使用一个包, 可以在官网提供的搜索页面搜索包的信息填入pom文件:search.maven.org
+
+- 进入到pom文件的目录, 在命令行使用命令: ` mvn clean package`, 正确的话就会在target文件夹看到编译结果
+
+- 在主流IDE中都对maven有支持, 可以导入或新建maven工程.
+
+## Spring Boot
+
+### 	REST API
+
+- 以前的网站前后端不分家, 例如 PHP  JSP 等, 如果只为PC端服务, 问题不大. 但是现在要求一个网站既能输出电脑网页, 更重要的是手机页面, 平板页面等等, 这样的架构就会很困难, 要想适配好就要弄三套页面设计才行. 还有一些平台化网站, 页面不太重要, 重要的是一条条的数据, 例如微博 FB, 他并没有网页的概念. 用户看到的不过是后端发来的一条条数据而已. 所以新的web设计逻辑应运而生. 简言之就是用URL定位资源，用HTTP动词（GET,POST,DELETE,DETC）描述操作。前后端传递信息主要用 JSON 格式 (成对的字符串组成的阵列). 
+
+- 如此一来, 前端发送数据请求, 后端响应纯数据, 没有网页代码, 那么任何硬件平台都可以读取这些数据再按照需求加工, 无需为了不同的硬件做适配. 后端程序可以使用Spring MVC 或者 Jersey 或者 Play Framework, 前端可以使用重量级的AngularJS，也可以用轻量级 Backbone + jQuery 等. 这样建立起来的网站或者叫API就是REST API.
+
+### 第一个SpringBoot项目
+
+- 准备好Maven, IntelliJ IDEA 免费版, 在Spring boot的官网工程生成器页面 ` https://start.spring.io/`可以自动生成一个工程.
+
+- 在生成器页面选择Maven作为项目管理工具, 语言是Java, Spring boot版本暂时无所谓. 后面的项目信息公司名称项目名称等等随意即可. Packaging打包方法选择Jar. 最后一个Java版本选择电脑上对应的版本, 由于我的Java 17网页上不支持, 网页只支持到15, 所以我选择了11. (电脑上也要设置成11)
+
+- 页面右边的依赖, Dependencies 里面就是spring boot帮我们已经集成好的各种组件, 我先选择Spring Web这个基于Spring 和Tomcat服务端的包即可.
+
+- 全部选好以后点击生成, 会自动下载工程模板到本地, 将之解压到需要的文件夹即可.
+
+- 然后在IntelliJ IDEA里面点击打开工程所在的文件夹就会自动导入(2020版, 没有2019版的导入工程按钮). 导入完成以后会自动给我们加上一堆外部插件, 就在 ` External Libraries`下面, 注意看里面的Java 版本要和我们之前选择的匹配.
+
+- 这里导入的工程由于选择了Maven作为管理工具, 目录结构包含了Maven的结构. 包括src就是源代码, target就是成品等等. 还多了两个文件夹.idea是IDE管理设置的文件, .mvn是Maven的文件. 然后工程目录里面还有 .gitignore这个文件说明也直接帮我们配置了git的支持方便以后使用.
+
+- 导入工程成功以后这个工程应该是可以运行的, 在 ` /src/main/java`路径下面应该有一个空白的class, 右键点击文件, run这个文件, 系统就会自动开始运行这个空白工程, 但是虽然我们没有写代码, 但是框架还是可以运行的. 运行以后如果没有问题, 会自动显示Terminal控制台窗口, 里面能看到Spring的文字LOGO, 其中有一行写着 `Tomcat started on port(s): 8080 (http) with context path ''`, 这就基本成功了. 打开浏览器, 输入网址: ` localhost:8080`, 回车就能看到这个服务器的错误信息, 说明服务器成功运行. 然后在IntelliJ IDEA里面点停止按钮就可以停止服务器运行.
+
+-  在` /src/main/java`路径下新增一个class, 起名叫HelloWorld, 默认的代码如下:
+
+    ```java
+    package com.example.johnson.web.backend;
+    
+    public class HelloWorld {
+    }
+    ```
+    
+    将代码修改成如下:
+    
+    ``` java
+    @RestController
+    public class HelloWorld {
+        @RequestMapping("/")
+        public String getString(){
+            return "Hello world from my first web app.";
+        }
+    }
+    ```
+    
+    然后IDE应该自动补上引用的模块在代码最前面, 如果没有自动出现, 手动写入也可以:
+    
+    ```java
+    import org.springframework.web.bind.annotation.RequestMapping;
+    import org.springframework.web.bind.annotation.RestController;
+    import org.springframework.web.context.annotation.RequestScope;
+    ```
+    
+    然后保存, 运行 (run), 和上次一样的Terminal信息说明成功, 同样在浏览器打入网址 ` localhost:8080`就可以看到代码中输出的一句话. 输出内容可以随意修改.
+
+- 代码解释 @RestController就是调用了一个REST API的控制器. @RequestMapping 就是调用了一个请求映射功能, 代码中给出的地址是"/", 代表网页的根目录或者默认的页面. 代码的意思就是服务器对于客户机根目录的请求就会运行下面的函数. 如果把"/"改成"/page", 那么想要运行下面的函数, 对应的网址就要改成 ` localhost:8080/page`. 如果在新网址能看到输出的信息, 那么工程就算运行成功.
+- 所以Spring boot就是使用一个个的@XXXX这样的标记符来引入功能, 而无需担心代码, 常见的模块都已经被配置完毕可以直接使用, 大大简化了编程.
 
