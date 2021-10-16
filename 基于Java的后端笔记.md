@@ -522,3 +522,5 @@
     ```
 
     写完后点击run, 运行成功后在浏览器输入这个带有很多参数的网址: ` http://localhost:8080/shoppinglist?date=2021-2-2&shop=supermarket&item=beef&purchased=1`, 如果运行正常的话会返回这些参数的 JSON格式. 以上网址也可以在curl中测试, 需要注意的是如果使用Windows powershell要在命令中使用转义符不然不能识别为一个命令: `  curl http://localhost:8080/shoppinglist?date=2021-2-2&shop=supermarket&item=beef&purchased=1` , Windows的转义符为反引号`.
+  
+- 这样我们的web程序就成功运行了. 程序由三个部分组成, 分别对应三个class, 数据库, 具体的程序功能, 主程序负责调用功能, 我们甚至不需要在主程序中写其他的模块在哪里, 就会由spring boot自动扫描出来. 自动扫描的前提是主程序和模块要在同一级或同一个package里面, 模块可以放入子目录, 但是不能放在主程序的上一级目录
