@@ -213,7 +213,7 @@
 
 ### Maven的测试工程
 
-- 新建一个放置工程的文件夹, 并且在文件夹位置打开控制台, 执行命令: ` mvn archetype:generate `, 然后程序会让你选择一个工程的模板, 直接按回车接受默认1823或者再单独选一个输入都可以(我选了747, 一个默认的Java工程), 程序会开始下载一系列文件, 如果还有选项按照提示操作即可. 然后要求你给出groupId(公司名), 随便起名字. 然后会问artifactId(程序的名字),随便起. 然后问你版本号, 随便起, 最后是package, 暂时随便起. 然后按y确认. 然后就会构建一个新的空白工程文件夹.
+- 新建一个放置工程的文件夹, 并且在文件夹位置打开控制台, 执行命令: ` mvn archetype:generate `, 然后程序会让你选择一个工程的模板, 直接按回车接受默认1823或者再单独选一个输入都可以(我选了747, 一个默认的Java工程), 程序会开始下载一系列文件, 如果还有选项按照提示操作即可. 然后要求你给出groupId(公司名), 随便起名字. 然后会问artifactId(产品的名字),随便起. 然后问你版本号, 随便起, 最后是package, 暂时随便起. 然后按y确认. 然后就会构建一个新的空白工程文件夹.
 
   > 如果我按照官网的方法构建反而会失败, 官网给出的命令是 ` mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false`, 程序报错说没有工程也没有pom文件, 直到我把所有参数删掉才可以了.
 
@@ -323,6 +323,8 @@
 
 ## Spring Boot
 
+- Spring Boot是一个基于Spring的快速开发工具, 不需编写复杂的配置文件. 内嵌了Tomcat和JSON支持, 开箱即用, 即使要配置也是大幅简化的.
+
 ### 	REST API
 
 - 以前的网站前后端不分家, 例如 PHP  JSP 等, 如果只为PC端服务, 问题不大. 但是现在要求一个网站既能输出电脑网页, 更重要的是手机页面, 平板页面等等, 这样的架构就会很困难, 要想适配好就要弄三套页面设计才行. 还有一些平台化网站, 页面不太重要, 重要的是一条条的数据, 例如微博 FB, 他并没有网页的概念. 用户看到的不过是后端发来的一条条数据而已. 所以新的web设计逻辑应运而生. 简言之就是用URL定位资源，用HTTP动词（GET,POST,DELETE,DETC）描述操作。前后端传递信息主要用 JSON 格式 (成对的字符串组成的阵列). 
@@ -339,7 +341,7 @@
 
 - 全部选好以后点击生成, 会自动下载工程模板到本地, 将之解压到需要的文件夹即可.
 
-- 然后在IntelliJ IDEA里面点击打开工程所在的文件夹就会自动导入(2020版, 没有2019版的导入工程按钮). 导入完成以后会自动给我们加上一堆外部插件, 就在 ` External Libraries`下面, 注意看里面的Java 版本要和我们之前选择的匹配.
+- 然后在IntelliJ IDEA里面点击打开工程所在的文件夹就会自动导入, 或者打开pom.xml文件就会出现导入工程选项. (2020版, 没有2019版的导入工程按钮). 导入完成以后会自动给我们加上一堆外部插件, 就在 ` External Libraries`下面, 注意看里面的Java 版本要和我们之前选择的匹配.
 
 - 这里导入的工程由于选择了Maven作为管理工具, 目录结构包含了Maven的结构. 包括src就是源代码, target就是成品等等. 还多了两个文件夹.idea是IDE管理设置的文件, .mvn是Maven的文件. 然后工程目录里面还有 .gitignore这个文件说明也直接帮我们配置了git的支持方便以后使用.
 
@@ -376,5 +378,147 @@
     然后保存, 运行 (run), 和上次一样的Terminal信息说明成功, 同样在浏览器打入网址 ` localhost:8080`就可以看到代码中输出的一句话. 输出内容可以随意修改.
     
 - 代码解释 @RestController就是调用了一个REST API的控制器. @RequestMapping 就是调用了一个请求映射功能, 代码中给出的地址是"/", 代表网页的根目录或者默认的页面. 代码的意思就是服务器对于客户机根目录的请求就会运行下面的函数. 如果把"/"改成"/page", 那么想要运行下面的函数, 对应的网址就要改成 ` localhost:8080/page`. 如果在新网址能看到输出的信息, 那么工程就算运行成功. 但是现在只能在IDE中运行, 以后还涉及打包发布等.
+
 - 所以Spring boot就是使用一个个的@XXXX这样的标记符来引入功能, 而无需担心代码, 常见的模块都已经被配置完毕可以直接使用, 大大简化了编程.
 
+### 第二个Spring boot项目, 一个简单的后端
+
+- 如果使用收费版IntelliJ IDEA, 新建工程的页面就可以直接选择spring boot工程, IDE会直接调用Spring boot的工程模板API, 免费版则需要每次在官网下载工程模板, 网址 `https://start.spring.io/`
+
+  - 如果不想使用网站模板, 也可以自己建立.
+
+- 如果要自己建立工程不使用模板方法是:
+
+  - 新建一个Maven工程, 输入好GorupId( 公司名称 ), Artifact (产品名称), 版本, 等. 命名时不能有空格, 有时会产生问题.
+
+  - 在pom文件中写入以下依赖即可:
+
+    ```xml
+    <parent>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <groupId>org.springframework.boot</groupId>
+        <version>2.5.5</version>
+    </parent>
+    
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+            </dependency>
+        </dependencies>
+    ```
+
+  - 这里引入了两个包, 一个是spring boot的基础包(版本2.5.5是我目前最新的稳定版， 也是IDE自动帮我填写的), 一个是spring boot的web包, 就可以提供一个基本的网站后端功能. 当然也可以引入别的包, 但是这个是最基础最简单的. 这里就是spring boot大幅简化编程的地方, 这两个组件不是真的两个组件, 他们包含了一大堆组件, 每一个都需要配置和编写, 在这里被几行代码全部搞定了.
+
+  - 记得要写在原pom的groupId等属性的后面.  当然要在<project></project>里面. 这样就可引入spring boot的组件.
+
+- 还要写一个主程序的入口, 也就是application class. 如果使用了spring boot模板来创建工程是自动生成好的, 但是从Maven开始的话就不会自动生成. 先在 ` src/main/java/`中建立你的group Id的package, 这个class也要位于这个package里面. 我给class一个名字叫application, 在第一行package名称后面引入: ` @SpringBootApplication`即可完成一个空白spring boot的程序.
+
+  - 在我尝试建立application时, 输入@SpringBootApplication系统无法解析, 解决方法是在编辑器右侧的maven标签菜单中点击刷新按钮, 这样maven会把spring boot下载到工程中, 因为我们并没有使用模板, 仅仅在pom文件引入spring boot并不会直接生效. 所以需要这样手动加载一下. 但是下一次其他工程应该就不需要, 因为文件只会被下载一次.
+  - 接下来添加一些固定的执行代码, 完成后文件如下:
+
+  ```java
+  package com.yourgroupId;
+  
+  import org.springframework.boot.SpringApplication;
+  import org.springframework.boot.autoconfigure.SpringBootApplication;
+  
+  @SpringBootApplication
+  public class application {
+      public static void main(String[] args){
+          SpringApplication.run(application.class, args);
+      }
+  }
+  ```
+
+  - main函数中那个函数调用的东西就是你的application同名的class.
+
+  - 此时我们的工程就已经可以运行了, 右键点击run即可.
+
+  - 在浏览器输入网址 ` http://localhost:8080/`可以看到一个网页就是成功了, 也可以在命令行中使用curl来读取, 命令: ` curl http://localhost:8080/` (需要安装curl). 如果返回结果: `{"timestamp":"2021-10-16T08:22:32.284+00:00","status":404,"error":"Not Found","path":"/"}`
+
+     就说明服务器在运行了. 如果服务器不在运行应该返回结果: `curl: (7) Failed to connect to localhost port 8081: Connection refused`
+
+  - 然后在IDE中停止服务.
+
+- 然后在src/main/java路径下这个package里面新加一个class, 就是我们的数据库. 因为要使用真正的MySQL数据库还有很多配置, 这里就使用一个Java的class当作数据库. 这里我写了一个数据库叫shoppingList, 新建完成后在空白的class里面建立数据库. 我定义了几个私有的属性, id, date, item, shop, purchased. 然后右键生成他们的构造函数和getter. 完成后代码如下:
+
+  ```java
+  package yourgroupId;
+  
+  
+  public class shoppingList {
+      private long id;
+      private String date, item, shop;
+      private boolean purchased;
+  
+      public shoppingList(long id, String date, String item, String shop, boolean purchased) {
+          this.id = id;
+          this.date = date;
+          this.item = item;
+          this.shop = shop;
+          this.purchased = purchased;
+      }
+  
+      public long getId() {
+          return id;
+      }
+  
+      public String getDate() {
+          return date;
+      }
+  
+      public String getItem() {
+          return item;
+      }
+  
+      public String getShop() {
+          return shop;
+      }
+  
+      public boolean getPurchased() {
+          return purchased;
+      }
+  }
+  ```
+
+  - 需要注意的是boolean要小写, get函数也要手动修改一下, 原来的名称会出错.
+
+- 然后再新增一个class, 作为这个shoppingList的controller. 名称可以就叫shoppingController. 在class定义之前引入一个组件 ` @RESTController`, 然后对应的引用也会由IDE自动完成. 这个控制器就是给前端返回shoppingList数据用的, 由他来操作后端数据库再返回数据. 
+
+  - class里面要定义一个变量，作为计数器使用来生成id号: ` private final AtomicInteger counter= new AtomicInteger();`, 这个功能需要的引用IDE也会自动加上.
+
+  - 在class里面引入一个GetMapping组件, 用来把内部的程序功能映射到网址上, 这样就能用网址访问程序功能. 代码 ` @GetMapping()`, 括号内写入想要映射的相对网址. 例如("/shoppinglist"), 这个网址一看就是访问购物清单的.
+
+  - Map组件的函数要从用户端传递参数, 需要传递的参数也要在这里定义好. 需要注意的是最后一个参数是boolean类型, 不能直接由JSON方式传递, 因为JSON传递的都是String类型, 所以只能先接受一个int类型的变量purchased, 再用一个函数转换成boolean值. 最后使用接收到的数据建立一个数据库的对象, 再原样输出一份证明接收正确.
+
+  - 还有在比较变量purchased和1的时候, 如果purchased变量是int这种基础变量, 可以使用==来比较, 如果purchased是String这种高级类型, 比较的是两个数据是否指向同一个地址. 如果purchased定义为了String, 那么要用equals()这个函数来比较, 语法: ` yourstring.equals("targetString")`. class完整代码如下:
+
+    ```java
+    package yourgroupId;
+    
+    import org.springframework.web.bind.annotation.GetMapping;
+    import org.springframework.web.bind.annotation.RequestParam;
+    import org.springframework.web.bind.annotation.RestController;
+    
+    import java.util.concurrent.atomic.AtomicInteger;
+    
+    @RestController
+    public class shoppingController {
+        
+        private final AtomicInteger counter = new AtomicInteger();
+    
+        @GetMapping("/shoppinglist")
+        shoppingList instance1(@RequestParam(defaultValue = "") String date, String item, String shop, int purchased) {
+            
+            boolean a = false;
+    
+            if (purchased==1){
+                a = true;
+            }
+            return new shoppingList(counter.incrementAndGet(), date, item, shop, a);
+        }
+    }
+    ```
+
+    写完后点击run, 运行成功后在浏览器输入这个带有很多参数的网址: ` http://localhost:8080/shoppinglist?date=2021-2-2&shop=supermarket&item=beef&purchased=1`, 如果运行正常的话会返回这些参数的 JSON格式. 以上网址也可以在curl中测试, 需要注意的是如果使用Windows powershell要在命令中使用转义符不然不能识别为一个命令: `  curl http://localhost:8080/shoppinglist?date=2021-2-2&shop=supermarket&item=beef&purchased=1` , Windows的转义符为反引号`.
