@@ -279,7 +279,7 @@
   
   - 都完成后再执行 ` mvn package`这次构建出来的jar文件终于可以成功执行. 不仅在这台电脑能执行, 应该在任意电脑都可以执行.(当然要有Java)
   
-  - 我已经大概了解工程的构建方式, 就是按照某个模板建立一些文件夹, 然后去pom文件里面设置好一系列参数, 写好源代码文件, 然后用Maven命令打包导出 jar 压缩包就可以在任意电脑上执行了.  我第一次运行不成功可能是其中有些默认设置并不契合我电脑的情况, 换了一个构建模板就好了.
+  - 我已经大概了解工程的构建方式, 就是按照某个模板建立一些文件夹, 然后去pom文件里面设置好一系列参数, 写好源代码文件, 然后用Maven命令打包导出 jar 压缩包就可以在任意电脑上执行了.  我第一次运行不成功是因为pom.xml中没有加入<build>字段, 加入构建模板就好了.
   
 ### POM的使用
 
@@ -523,4 +523,22 @@
 
     写完后点击run, 运行成功后在浏览器输入这个带有很多参数的网址: ` http://localhost:8080/shoppinglist?date=2021-2-2&shop=supermarket&item=beef&purchased=1`, 如果运行正常的话会返回这些参数的 JSON格式. 以上网址也可以在curl中测试, 需要注意的是如果使用Windows powershell要在命令中使用转义符不然不能识别为一个命令: `  curl http://localhost:8080/shoppinglist?date=2021-2-2&shop=supermarket&item=beef&purchased=1` , Windows的转义符为反引号`.
   
-- 这样我们的web程序就成功运行了. 程序由三个部分组成, 分别对应三个class, 数据库, 具体的程序功能, 主程序负责调用功能, 我们甚至不需要在主程序中写其他的模块在哪里, 就会由spring boot自动扫描出来. 自动扫描的前提是主程序和模块要在同一级或同一个package里面, 模块可以放入子目录, 但是不能放在主程序的上一级目录
+  - 网址的写法, 根目录("/")就是localhost, 或者ip地址或者域名, 后面的网址就是shoppinglist, 在代码中定义过了. 网址后面跟参数的写法就是加"?"问号, 然后用字符串对的形式给出参数, 用等号来表示一对属性参数, 多个参数用"&"隔开. 例如 ` ?date=1/21/2020&item=bread`
+  
+- 这样我们的web程序就成功运行了. 程序由三个部分组成, 分别对应三个class, 数据库, 具体的程序功能, 主程序负责调用功能, 我们甚至不需要在主程序中写其他的模块在哪里, 就会由spring boot自动扫描出来. 自动扫描的前提是主程序和模块要在同一级或同一个package里面, 模块可以放入子目录, 但是不能放在主程序的上一级目录.
+
+- 接下来是程序的打包发布, 如果这时候在IDE右侧的Maven标签页中直接执行package命令, 就在target文件夹下会生成一个jar包文件, 如果在命令行下面试图部署的话:  `java -jar *.jar`, 会出错. 错误是jar中没有主清单属性. 因为我们的pom.xml文件少了一个打包的工具, 在pom.xml中加入这个包即可:
+
+  ```xml
+  <build>
+      <plugins>
+          <plugin>
+              <groupId>org.springframework.boot</groupId>
+              <artifactId>spring-boot-maven-plugin</artifactId>
+          </plugin>
+      </plugins>
+  </build>
+  ```
+
+  然后再一次运行mvn package, 就会生成一个jar包, 比刚才的体积要大得多. 然后将jar文件放置到任意电脑上, 只要安装了java 运行环境 JRE 或者JDK, 使用命令 ` java -jar *.jar`就可以部署这个网络服务. 因为java的特性, 无需为了不同的操作系统编译单独的版本, 一个jar包可以运行在几乎所有的平台. 在我的例子中, 我用Windows下的IntelliJ IDEA打包好jar文件, 使用JDK版本为11, 将jar文件 copy到Linux的电脑, 使用JRE版本为17去运行这个jar包, 也可以成功运行.
+
