@@ -347,7 +347,7 @@ switch(){
           }
     ```
 
-#### 函数(或者method 方法)
+### 函数(或者method 方法)
 
 - 一个函数必须定义在一个class内部,  先给出函数的一些性质(static, public, private 等等), 返回类型(输出的数据类型), 名称, 参数, 最后是代码. 
 - 调用函数就是使用函数名和括号, 如果有参数就写在括号内.
@@ -381,6 +381,124 @@ switch(){
   以上函数写在main class内, 但是写在main 函数外, 也就是说一个函数内不能定义另一个函数.
 
   在使用循环, 递归这类功能时要小心进入无限循环, 一般要设置停止条件. 上面代码的停止条件比较开放, 不够安全., 最好是设定成 start, end这样的数字范围才足够安全.
+
+### OOP 面向对象编程
+
+- 面向过程编程就是只处理数据, 面向对象就是处理的几乎都是对象, 除了数据本身, 往往还附加绑定了很多功能(函数). OOP的好处, 结构清晰, 减少重复代码, 容易维护和管理. 重复使用代码很方便. 将需要重复使用的代码提取出来单独放置, 这样可以尽量减少重写.
+
+#### class 类
+
+- class 和 object的区别. class就是一个模板,或者一个抽象的概念, 这个模板的具体例子就是object. 所以创建一个对象(object)时, 他会从模板那里继承所有变量和函数. 变量和函数也叫属性(attributes)和方法(method).
+
+- 创建一个class, 要使用关键词class, 命名的第一个字母要大写, 文件名一定要和class名一致. 起始一个class可以理解为一个新的数据格式, 类似int.
+
+- 创建一个object, 首先指定object的类型, 也就是class 名, 然后命名, 然后等号后面要用关键字 new. 例如建立一个class 叫Main, 然后建立一个object属于这个class的代码如下:
+
+  ```java
+  public class Main {
+    int x = 5;
+  
+    public static void main(String[] args) {
+      Main Obj = new Main();
+      System.out.println(myObj.x);
+    }
+  }
+  ```
+
+- 既然class是模板, 那么当然一个模板可以创建无数个实例, 只要每一个命名不一样即可. 例如:
+
+  ```java
+      Main myObj1 = new Main();  
+      Main myObj2 = new Main(); 
+  ```
+
+- 一般每个class都存放在单独的文件中, 然后用Main class去建立所有的object和调用这些object里面的数据和函数. 代码如下:
+
+  ```java
+  MyClass.java
+  public class MyClass {
+    int x = 5;
+      public int cal(int a){
+          return a+x;
+  	}
+  }
+  ```
+
+  ```java
+  Main.java
+  class Main {
+    public static void main(String[] args) {
+      MyClass myObj = new MyClass();
+      System.out.println(myObj.x);
+      System.out.println(myObj.cal(89));
+    }
+  }
+  ```
+
+  - 上面两个java文件放在同一文件夹下面就可以互相访问, 无需引用.
+
+#### class attributes 类的属性
+
+- 属性(attribute)也叫变量(variables), 还有些地方叫域(field). 无法访问一个class, 因为他只是一个模板, 我们要将他实例化, 将他变成一个对象才能访问. 访问的方法是对象名称后面加点. 在上个例子中我们就访问了myObj这个对象里面的x变量, 写法是myObj.x
+- 我们可以随意改变变量的值, 例如 `myObj.x=10`, 如果我们不希望变量被改变, 那么就在定义的时候加上 `final`关键词: ` final int x=10;` 这个用法是为了保存一个常量, 例如一个系统的参数, 这样它就不会被随意修改, 当我们要修改的时候也只要修改一处即可.
+- 如果一个class建立了多个对象, 要注意区分每个对象里面的同名变量. 例如 myObj.x 和myObj2.x
+
+#### class method 类的函数
+
+- 一个class里面可以写无数个变量, 也可以写任意数量的函数. 调用函数就是函数名加括号, 如果有参数就在括号内写入.
+- static 函数与 非 static函数. 如果在定义class时, 定义了static函数, 意思就是这个函数不需要建立一个实例的对象也可使用, 而 非static的函数, 就必须要通过建立一个对象才可以使用.  
+  - 需要注意的是, 要使用static函数, 那么就没有建立对象的步骤, 那么其中函数以外的变量很可能还是不能访问的, 变量也需要建立对象才会存在.
+  - 要使用static函数, 调用的时候对象名称就要改成class名称. 例如 ` myObj1.x();`这样的调用就是使用了对象的名称, 而static函数不需要建立对象, 那调用的话就是: ` myClass.x();`
+
+#### java constructor 构造函数
+
+- 构造函数就是用来初始化对象的函数. 当创建对象的时候就会调用构造函数. 构造函数的名称必须要和class名称一致, 而且不能有输出类型(就是不能写void, int等等).
+
+- 所有的class默认都有构造函数, 如果没有手动写, 系统会给你自动创建. 但是你就不能给他加入你想要的初始数据了.
+
+- 构造函数也是可以接收参数的, 用来设定初始值. 例如:
+
+  ```java
+  public class Main {
+    int x;
+  
+    public Main(int y) {
+      x = y;
+    }
+  
+    public static void main(String[] args) {
+      Main myObj = new Main(5);
+    }
+  }
+  ```
+
+  这个例子中, Main class就有一个没有返回类型的函数, 与class 同名. 系统就会把它认作构造函数. 这个构造函数要求了一个整数的输入,用来初始化变量x, 在建立对象时, 也传入了一个整数.
+
+- 当然, 也可以传入多个参数, 同时初始化多个变量.
+
+#### Java modifier 修饰词
+
+- 常用的一个修饰词时public, 这是一个访问修饰, 控制由哪些权限可以访问或使用后面定义的东西.
+- 常用的修饰词:
+  -  修饰class的: 
+    - public 可以被另一个class 访问
+    - default 只能被处在同一个package(文件夹)的class访问,如果没有修饰词就会应用这个默认修饰词.
+  - 修饰class成员的: 
+    - public 可以被所有class访问, 基本上相当于开放了
+    - private 只能被自己的class访问
+    - default 只能被同一个package内访问, 如果没有指定, 就会应用这个默认的.
+    - protected 可以被同一个package和子类(subclass)访问.
+- 还有非权限控制的修饰词:
+  - 修饰class的
+    - final 这个class不能被继承
+    - abstract 抽象, 这个class不能用来创建对象. 要访问抽象class, 只能从别的class继承.
+  - 修饰class成员的
+    - final 成员变量不能被修改, 函数不能override
+    - static 变量和函数属于class, 不属于对象. 即是建立对象时不会建立static的成员, static成员只有一份存在class里面.
+    - abstract 只能在abstract class里面用, 而且只能在函数上用. 而且函数没有代码只有名称例如: ` abstract void run();` 函数代码会在继承时提供.
+    - transient 成员在序列化成对象时会被跳过
+    - synchronized 函数一个只能被一个线程访问.
+    - volatile 变量的值不在线程内部缓存, 永远从内存中读取.
 
 
 ## Maven 的安装
