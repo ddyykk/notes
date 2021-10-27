@@ -49,9 +49,9 @@
      }
      ```
 
-	- 保存为后缀名为 java的文件.
+	- 保存为后缀名为 HelloWorldApp.java的文件.
 	
-	- 在命令行进入保存java文件的目录, 编译文件, 命令: ` javac a.java`, 这样会生成一个HelloWorldApp.class文件, 此文件为java的可执行文件. 文件名一定是这个除非另外指定, 因为这是代码中写好的.
+	- 在命令行进入保存java文件的目录, 编译文件, 命令: ` javac HelloWorldApp.java`, 这样会生成一个HelloWorldApp.class文件, 此文件为java的可执行文件. 文件名一定是这个除非另外指定, 因为这是代码中写好的.
 	
 	- 执行 HelloWorldApp.class 文件, 命令: ` java -cp . HelloWorldApp`  命令中` .`的意思为当前目录, 如果执行文件不在当前目录要改为具体路径. 输出Hello World! 就说明程序成功执行, JDK的安装也没有问题.
 
@@ -447,7 +447,7 @@ switch(){
 
 - 一个class里面可以写无数个变量, 也可以写任意数量的函数. 调用函数就是函数名加括号, 如果有参数就在括号内写入.
 - static 函数与 非 static函数. 如果在定义class时, 定义了static函数, 意思就是这个函数不需要建立一个实例的对象也可使用, 而 非static的函数, 就必须要通过建立一个对象才可以使用.  
-  - 需要注意的是, 要使用static函数, 那么就没有建立对象的步骤, 那么其中函数以外的变量很可能还是不能访问的, 变量也需要建立对象才会存在.
+  - 需要注意的是, 要使用static函数, 那么就没有建立对象的步骤, 那么其中函数以外的变量很可能还是不能访问的, 因为变量也需要建立对象才会存在.
   - 要使用static函数, 调用的时候对象名称就要改成class名称. 例如 ` myObj1.x();`这样的调用就是使用了对象的名称, 而static函数不需要建立对象, 那调用的话就是: ` myClass.x();`
 
 #### java constructor 构造函数
@@ -479,26 +479,108 @@ switch(){
 #### Java modifier 修饰词
 
 - 常用的一个修饰词时public, 这是一个访问修饰, 控制由哪些权限可以访问或使用后面定义的东西.
-- 常用的修饰词:
+- 权限控制的修饰词:
   -  修饰class的: 
-    - public 可以被另一个class 访问
+    - public 可以被另一个class 访问, 意思就是别的class能不能创建这个class的对象.
     - default 只能被处在同一个package(文件夹)的class访问,如果没有修饰词就会应用这个默认修饰词.
   - 修饰class成员的: 
     - public 可以被所有class访问, 基本上相当于开放了
     - private 只能被自己的class访问
     - default 只能被同一个package内访问, 如果没有指定, 就会应用这个默认的.
-    - protected 可以被同一个package和子类(subclass)访问.
-- 还有非权限控制的修饰词:
+    - protected 可以被同一个package和子类(subclass, 就是继承类)访问.
+- 非权限控制的修饰词:
   - 修饰class的
     - final 这个class不能被继承
     - abstract 抽象, 这个class不能用来创建对象. 要访问抽象class, 只能从别的class继承.
   - 修饰class成员的
     - final 成员变量不能被修改, 函数不能override
     - static 变量和函数属于class, 不属于对象. 即是建立对象时不会建立static的成员, static成员只有一份存在class里面.
-    - abstract 只能在abstract class里面用, 而且只能在函数上用. 而且函数没有代码只有名称例如: ` abstract void run();` 函数代码会在继承时提供.
+    - abstract 只能在abstract class里面用, 而且只能在函数上用. 而且函数没有代码只有名称, 例如: ` abstract void run();` 函数代码会在继承时提供.
     - transient 成员在序列化成对象时会被跳过
-    - synchronized 函数一个只能被一个线程访问.
+    - synchronized 函数一次只能被一个线程访问.
     - volatile 变量的值不在线程内部缓存, 永远从内存中读取.
+
+#### java encapsulation 封装
+
+- 封装的意思是, 有一些敏感的数据是对用户不可见的. 要封装数据, 要把变量定义为 ` private`, 要操纵这些变量就要用 get 函数(读取) 和 set 函数(赋值).
+- getter 和 setter 的写法也是有标准的, 首先要用 public 来修饰, 函数名称要以get和set开头, 后跟变量名, 但是首字母要大写. 例如:
+
+```java
+public class Person {
+  private String id; // private = restricted access
+
+  // Getter
+  public String getId() {
+    return id;
+  }
+
+  // Setter
+  public void setId(String newId) {
+    this.id = newId;
+  }
+}
+```
+
+需要注意的是, 这里使用了 ` this`关键词,  意思是这个对象的意思. 因为使用的时候 class 会被实例化成对象. 当然, 变量id是 private 的, 外部也无法访问.
+
+- 一个使用 setter 和 getter 的例子:
+
+  Person class
+
+  ```java
+  public class Person {
+     private String name;
+  
+     // Getter
+     public String getName() {
+       return name;
+     }
+  
+     // Setter
+     public void setName(String newName) {
+       this.name = newName;
+     }
+  }
+  ```
+
+  Main class:
+
+  ```java
+  public class Main {
+    public static void main(String[] args) {
+      Person myObj = new Person();
+      myObj.setName("John");
+      System.out.println(myObj.getName());
+    }
+  }
+  ```
+
+  - 以上例子省略了构造函数, 因为并不需要设定初始值, 现实工作中, 建立一个class, 构造函数, getter, setter 都是默认要写的.
+  - IDE中会提供自动生成这些常用函数的功能, 可以节省大量时间. 在IntelliJ IDEA上就可以右键, 生成这些常用的 重复代码, 无需手打. 
+
+- 使用封装的好处: 更好的控制这些变量和函数.  可以使变量成为只读的, 只要不写setter就可以. 管理代码也更容易, 可以只修改一部分而不影响其他. 关键数据对用户不可见更加安全.
+
+#### Java package 包装或者包
+
+- 一个package是用来给相关的class文件分组的, 类似一个文件夹. 用包来避免命名冲突, 方便管理代码. 包分为自带的和用户定义的. JDK 的Java API自带了很多包,  ` https://docs.oracle.com/javase/8/docs/api/.`具体在线文档可以看细节. 一个库(Library)可以分割成package 和 class , 就是说你可以引入一个class 也可以引入一个package.
+
+- 引入一个class, 需要用import关键词. 例如需要 ` Scanner` class, 用来处理用户输入, 代码就是: ` import java.util.Scanner;`, 记得结尾也要分号. ` java.util`就是一个package, 而 ` Scanner`则是一个class. 以下的例子里面我们要用 ` Scanner` class 的一个函数, ` nextLine()`, 用来读取一行用户输入(以回车键结尾算一行).
+
+  ```java
+  import java.util.Scanner;
+  
+  class MyClass {
+    public static void main(String[] args) {
+      Scanner myObj = new Scanner(System.in);
+      System.out.println("Enter username");
+  
+      String userName = myObj.nextLine();
+      System.out.println("Username is: " + userName);
+    }
+  }
+  ```
+
+  
 
 
 ## Maven 的安装
