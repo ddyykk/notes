@@ -560,11 +560,11 @@ public class Person {
 
 - 使用封装的好处: 更好的控制这些变量和函数.  可以使变量成为只读的, 只要不写setter就可以. 管理代码也更容易, 可以只修改一部分而不影响其他. 关键数据对用户不可见更加安全.
 
-#### Java package 包装或者包
+#### Java package 包
 
 - 一个package是用来给相关的class文件分组的, 类似一个文件夹. 用包来避免命名冲突, 方便管理代码. 包分为自带的和用户定义的. JDK 的Java API自带了很多包,  ` https://docs.oracle.com/javase/8/docs/api/.`具体在线文档可以看细节. 一个库(Library)可以分割成package 和 class , 就是说你可以引入一个class 也可以引入一个package.
 
-- 引入一个class, 需要用import关键词. 例如需要 ` Scanner` class, 用来处理用户输入, 代码就是: ` import java.util.Scanner;`, 记得结尾也要分号. ` java.util`就是一个package, 而 ` Scanner`则是一个class. 以下的例子里面我们要用 ` Scanner` class 的一个函数, ` nextLine()`, 用来读取一行用户输入(以回车键结尾算一行).
+- 引入一个class, 需要用import关键词. 例如需要 ` Scanner` class, 用来处理用户输入, 代码就是: ` import java.util.Scanner;`, 记得结尾也要分号. ` java.util`就是一个内置的package, 而 ` Scanner`则是一个class. 以下的例子里面我们要用 ` Scanner` class 的一个函数, ` nextLine()`, 用来读取一行用户输入(以回车键结尾算一行).
 
   ```java
   import java.util.Scanner;
@@ -580,7 +580,285 @@ public class Person {
   }
   ```
 
+- 引入一个package,  ` import java.util.*;`用星号表示所有的class就可以引入整个package.
+- 如果想自定义package, 要用 ` package`关键词. 代码: ` package mypackage;` 然后再写下代码即可. 一般在现代的IDE中, 无需再手动编译package. 只要在新建菜单中选择package即可, 编译的时候会自动生成package名字的文件夹. 同一个package下的文件一般是可以互相看见的, 不需要引用.
+
+#### Java inheritance 继承
+
+- Java可以用一个class 来继承另一个class 的变量和函数 , 被继承的就是父类(superclass), 继承的就是子类(subclass).
+
+- 如果要继承, 就使用extends 关键词.  例如我们建立一个class 叫做People, 然后用一个class Student去继承他, 在继承的时候除了会继承所有的变量和函数, 还能添加原本父class不存在的属性. 这也是继承的意义, 即不用重复写已经存在的部分.
+
+  ```java
+  class People {
+      protected int id=1;
+      public void outputId(){
+          System.out.println(id);
+      }
+  }
   
+  class Student extends People{
+      //
+  }
+  ```
+
+  - 当使用Student模板建立一个新的object时, 这个对象也具有id这个父class的属性.
+  - People class的id用了protected来修饰, 因为这样才能被子类访问, 如果是private就不能被子类访问了.
+  - 如果要让一个class 不能被继承, 就要加上final修饰词.
+
+#### Java的多态 Polymorphism
+
+- 多态的意思是从一个class继承出来的多个class的关系. 类似上一个例子中 People的子类是Student, 那么其实还可以有多个继承, 例如Man, Woman, Child. 他们可以有相同的属性, 但是也可以有自己独特的属性. 
+
+#### Inner class 内部类
+
+- 内部类的意思就是一个class 里面还有一个class, 这样的用处是让类似的class都放在一起, 方便阅读. 
+
+```java
+class OuterClass {
+  int x = 10;
+
+  class InnerClass {
+    int y = 5;
+  }
+}
+
+public class Main {
+  public static void main(String[] args) {
+    OuterClass myOuter = new OuterClass();
+    OuterClass.InnerClass myInner = myOuter.new InnerClass();
+    System.out.println(myInner.y + myOuter.x);
+  }
+}
+```
+
+- 使用内部类的时候要先创建一个外部类的对象, 再创建一个内部类的对象.  要注意这里的写法, 有点绕.
+- 如果将内部类定义为 private 或者 protected, 外部类就不能访问内部类.
+- 如果将内部类定义为 static, 就不需要创建外部的对象就可以使用内部类创建对象. 但是如果静态类使用了外部类的数据, 那么就还是要实例化外部类才行, 否则外部类是不存在的.
+- 创建了外部类对象和内部类对象以后要注意, 内部类对象是可以访问外部对象的数据和函数的.
+
+#### Java的抽象 Abstraction
+
+- 数据抽象的意思就是只给用户显示核心和必须的信息, 其他的信息全部隐藏. 抽象可以通过建立抽象class或者界面(interface)的方式来完成.
+
+- abstract class 就是不能用来建立对象的,  要访问他, 只能用另外一个class继承他.  abstract method 抽象函数就是只存在于抽象class中, 抽象函数没有内容, 内容要在被继承的时候赋予.
+
+- 抽象class 也可以包含非抽象的函数. 例:
+
+  ```java
+  abstract class Animal {
+    public abstract void animalSound();
+    public void sleep() {
+      System.out.println("Zzz");
+    }
+  }
+  ```
+
+  以上这个class如果创建对象就会报错. 其中的第一个函数也没有代码只有名称.
+
+  要使用这个class, 要先继承他:
+
+  ```java
+  class Pig extends Animal {
+    public void animalSound() {
+      // The body of animalSound() is provided here
+      System.out.println("The pig says: wee wee");
+    }
+  }
+  
+  class Main {
+    public static void main(String[] args) {
+      Pig myPig = new Pig(); // Create a Pig object
+      myPig.animalSound();
+      myPig.sleep();
+    }
+  }
+  ```
+
+  - 抽象的作用就是隐藏信息, 只开放特定的信息给用户.
+
+#### Interface 接口
+
+- 另外一种抽象的方法就是使用接口. 接口就是一种完全抽象的class, 把相关的函数都放在一起, 但是没有代码, 只有名称. 代码都存放在另外一处地方, 以达到保密的目的. 要使用这些函数, 就要使用另外一个class, 配合implemants关键词. 函数的代码都由这个implements class提供.
+
+- 示例代码:
+
+  ``` java
+  interface Animal {
+    public void animalSound(); 
+    public void sleep(); //只有名称没有代码的函数
+  }
+  
+  class Pig implements Animal {
+    public void animalSound() {
+  //函数代码在这里提供
+      System.out.println("The pig says: wee wee");
+    }
+    public void sleep() {
+  
+      System.out.println("Zzz");
+    }
+  }
+  
+  class Main {
+    public static void main(String[] args) {
+      Pig myPig = new Pig();  // 创建对象
+      myPig.animalSound();
+      myPig.sleep();
+    }
+  }
+  ```
+
+  - 界面和抽象class 类似, 都不能当作对象的创建模板.
+  - 界面的函数也都没有代码, 代码都放在implements class里面, 实施的时候全部函数都要被override(重写).
+  - 界面的函数默认就是abstract 和public的, 所以无需写出来.
+  - 界面的变量默认就是public static 还有final的, 即无需对象化就存在, 也不能被更改的.
+  - 界面不能对象化, 当然也就没有构造函数.
+
+- interface 界面的用途, 除了加密需求外, 因为Java不支持多重继承, 即一个class只能从一个父class继承, 例如学生这个class就可以继承儿童和人这两个class, 要做到这样, 就要使用界面.  因为一个class可以实现多个界面. 要实现多个界面, 用逗号分隔开. 示例如下:
+
+  ```java
+  interface FirstInterface {
+    public void myMethod(); // interface method
+  }
+  
+  interface SecondInterface {
+    public void myOtherMethod(); // interface method
+  }
+  
+  class DemoClass implements FirstInterface, SecondInterface {
+    public void myMethod() {
+      System.out.println("Some text..");
+    }
+    public void myOtherMethod() {
+      System.out.println("Some other text...");
+    }
+  }
+  
+  class Main {
+    public static void main(String[] args) {
+      DemoClass myObj = new DemoClass();
+      myObj.myMethod();
+      myObj.myOtherMethod();
+    }
+  }
+  ```
+
+  - 这其中interface的函数前面不需要public, 因为这个代码是教程中的. 还有要implement这些interface, 可以自动生成他们的函数名称返回类型等等, 不需要重新写这些重复的代码.
+
+#### Java Enums 枚举
+
+- 枚举包含了一组常量. 
+
+- 要创建一个 enum, 用 ` enum`关键词来建立, 然后常量用逗号分开, 一般都是用大写字母. 例如:
+
+  ```java
+  enum Level {
+    LOW,
+    MEDIUM,
+    HIGH
+  }
+  ```
+
+  - 使用的时候就写 Level.LOW
+  - enum可以放在class外面和class同级也可以放在class里面. 放在class里面 enum 默认是static的, 无需对象化. 可以直接用. 示例:
+
+  ```java
+  public class MyClass {
+  
+  enum namelist{
+      Jonny,Ive,Teddy,Helen
+  	}
+  }
+  
+  然后在mian()中调用:
+  public class Main {
+  
+      public static void main(String[] args) {
+           MyClass.namelist myname= MyClass.namelist.Jonny;
+          System.out.println(myname);
+      }
+  }
+  ```
+
+  - 注意调用的写法比较绕.
+
+- enum在switch语句中的使用, enum在switch中常常用来做数值判断. 代码: 
+
+  ```java
+   MyClass.namelist myname= MyClass.namelist.Jonny;
+  
+          switch (myname){
+              case Jonny:System.out.println("My name is "+myname+". ");break;
+              case Ive:System.out.println("My name is "+myname+". ");break;
+              case Helen:System.out.println("My name is "+myname+". ");break;
+              case Teddy:System.out.println("My name is "+myname+". ");break;
+              default:System.out.println("My name is null. ");
+          }
+  ```
+
+- enum自带一个values() 函数, 会给出所有的值的阵列, 用来历遍这个里面所有的值很有用. 还是上面的例子, 结合一个for each loop:
+
+  ```java
+   for (MyClass.namelist myname:MyClass.namelist.values()
+               ) {
+              switch (myname){
+                  case Jonny:System.out.println("My name is "+myname+". ");break;
+                  case Ive:System.out.println("My name is "+myname+". ");break;
+                  case Helen:System.out.println("My name is "+myname+". ");break;
+                  case Teddy:System.out.println("My name is "+myname+". ");break;
+                  default:System.out.println("My name is null. ");
+              }
+          }
+  ```
+
+- enum和class的区别: enum也可以有变量和函数, 但是他们都是public和static和final的. 不能改变, 不能改写(override). enum不能创建对象, 不能继承其他class, 但是可以implement 界面. 使用enum的原因是里面有很多值是无需改变的, 例如年月日, 颜色, 一组卡片等.
+
+#### Java 的用户输入
+
+- 在java.util package里面有一个class Scanner用来处理用户输入. 要使用他就创建一个Scanner的对象并传入System.in这个变量. 前面已经用过. 然后用 ` nextLine()`函数来读取字符串. 除此以外还可以读取其他类型:
+
+  - 布尔值
+  - 字节
+  - double 小数
+  - float 小数
+  - int 整数
+  - long 整数
+  - short 整数
+
+- 如果输入的类型与期待的类型不同, 就会产生系统错误, 处理方法在后面讲到.
+
+- 读取的代码如下:
+
+  ``` java
+  import java.util.Scanner;
+  
+  class Main {
+    public static void main(String[] args) {
+      Scanner myObj = new Scanner(System.in);
+  
+      System.out.println("Enter name, age and salary:");
+  
+      // String input
+      String name = myObj.nextLine();
+  
+      // Numerical input
+      int age = myObj.nextInt();
+      double salary = myObj.nextDouble();
+  
+      // Output input by user
+      System.out.println("Name: " + name);
+      System.out.println("Age: " + age);
+      System.out.println("Salary: " + salary);
+    }
+  }
+  ```
+
+  每次输入完都要按回车, 一定要按要求的顺序输入.
+
+#### Java的日期与时间
+
+- 
 
 
 ## Maven 的安装
