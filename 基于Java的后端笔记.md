@@ -858,7 +858,130 @@ public class Main {
 
 #### Java的日期与时间
 
-- 
+- Java没有内置日期class, 但是可以引入 ` java.time`package来处理日期和时间. 例如
+
+  - LocalDate 用来指示一个日期
+  - LocalTime 用来指示时间
+  - LocalDateTime 指示日期和时间
+  - DateTimeFormatter 用来转换日期和时间的格式
+
+- 显示当前日期: 引入 ` java.time.LocalDate`class, 然后用 now()函数.
+
+- 显示当前时间: 引入 ` java.time.LocalTime`class, 用 now()函数.
+
+- 显示当前日期和时间: 引入 ` java.time.LocalDateTime`class, 用now()函数.
+
+- 日期和时间格式: 引入 ` java.time.format.DateTimeFormatter`其中的ofPattern()函数来指定输出格式. 以上功能的代码如下:
+
+  ```java
+  import java.time.LocalDate;
+  import java.time.LocalTime; 
+  import java.time.LocalDateTime;
+  import java.time.format.DateTimeFormatter; 
+  
+  public class Main {
+  
+      public static void main(String[] args) {
+          
+          LocalDate myDate=new LocalDate.now();
+          LocalTime myTime=new LocalTime.now();
+          LocalDateTime myDateTime=new LocalDateTime.now();
+          DateTimeFormatter myFormat=new DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+          String dateTime=myDateTime.format(myFormat);
+          System.out.println(myDateTime);
+          System.out.println(dateTime);
+      }
+  }
+  ```
+
+  - 在我写入代码测试的时候会报错, 说找不到对象. IDE 提示我删除所有的new关键词, 然后就可以了. 可能是新版的Java有了一些更改.
+  - 没有格式化时输出的日期时间是 ` 2021-10-30T15:59:50.163223800` 中间的T是分隔日期和时间的, 后面的数字是纳秒, 为了精确, 但是一般都用不上这样的格式, 所以一般都要自己格式化. 经过格式化的输出是 ` 30-10-2021 15:59:50`, 注意里面不包含时区信息, 他读取的是电脑主机的时钟而已.
+
+  - ofPattern()接受的常见格式有:
+    - *yyyy-MM-dd*
+    - *dd/MM/yyyy*
+    - *dd-MMM-yyyy*
+    - *E, MMM dd yyyy* 其中E是星期几, MMM指的是月份的英文简写.
+
+#### Java的阵列列表 ArrayList
+
+- 一个 ` ArrayList`是一个可改变大小的阵列, 在 ` java.util`里面定义.
+
+- 他和标准的array的区别是, array的尺寸是不能更改的. 要想增加或减少元素, 就要重新建立array. ` ArrayList`可以随时添加元素. 语法稍微有区别.
+
+- 建立一个` ArrayList`对象的语法: 
+
+```java
+ArrayList<String> cars = new ArrayList<String>(); 
+```
+
+-   `ArrayList`的一些函数:
+
+  - 加入元素:
+
+  ```java
+      ArrayList<String> cars = new ArrayList<String>();
+      cars.add("Volvo");
+      cars.add("BMW");
+      cars.add("Ford");
+      cars.add("Mazda");
+      System.out.println(cars);
+  ```
+
+  - 最后一句会把所有的元素在方括号中输出, 没有双引号.
+  - IDE推荐的写法是: `ArrayList<String> cars = new ArrayList<>(); `, 因为后面一个String很明显, 不用强调.
+  - 使用元素, 不能直接使用下标, 要使用get()函数. 例如 ` cars.get(0)`, 要修改元素就要使用set()函数: ` cars.set(0, "Honda")`, 其中0 是index, 后面跟你要更新的值. 要删除元素, 就用remove()函数, ` cars.remove(0)`, 要清空这个阵列列表, 用 ` cars.clear()` 函数. 还有一个size()函数会返回列表的元素个数. 删除掉一个元素, 后面的元素全部会前移.
+
+- 历遍列表: 使用 ` for-each loop`
+
+  ```java
+  for (String i:cars
+        ) {
+       System.out.println(i);
+  }
+  ```
+
+- 在阵列列表里面存储的实际都是对象, 就像String全部都是对象, 而不是数据格式一样, 如果要在列表中存放别的数据格式, 也要用一个封装过的格式, int 要用 Integer, boolean 要用 Boolean, char 要用 Character,  double 要用Double. 例如 ` ArrayList<Integer> myNumbers = new ArrayList<Integer>();`
+
+- ` java.util`里面还有个常用的class是 Collection, 有个sort()函数, 用来给列表排序. 这是一个static函数, 无需建立对象. 代码: ` Collections.sort(cars);`. 如果是字符串就按字母顺序排, 数字就按数字排. 字母数字都有就是先数字后字母.
+
+#### LinkedList
+
+- 连接表 跟 ArrayList 非常类似, 都可以用类似阵列的方式存储数据(其实是对象), 只要将代码中的ArrayList替换成LinkedList就可以继续使用. 所有的函数也有是一样的, 因为其他们都是 实现了 List 这个界面. 
+- 区别. Array List包含一个阵列, 也就是不能随意加减元素, 添加元素的原理实际上是删除旧的, 新建一个新的. 而Linked List 的所有成员对象都放在单独的容器, 只不过互相链接起来了, 添加元素的时候就是新加了一个容器, 再跟原来的容器链接起来.
+- 所以 ArrayList 更适合存储和统计数据, 可能会运行效率更高, LinkedList 用来操纵数据(增删改), 有些函数更方便. 例如, 看名字就知道意思了, 这个就不解释了.
+  - addFirst()
+  - addLast()
+  - removeFirst()
+  - removeLast()
+  - getFirst()
+  - getLast()
+
+#### Java HashMap 哈希映射
+
+- 不像 ArrayList , 它是把数据按照编号排列的, 一个哈希映射使用成对的 "名称/值" 来存储数据, 要找到他们的时候不用记编号, 而是直接使用他们的名称.  而且名称和值不一定是同一种数据, 名称可以是字符, 值是数字.
+
+- 例子, 建立一个存贮城市名称的映射, 所以名称和值都是字符串:
+
+  ```java
+  import java.util.HashMap; //要引入这个功能
+  
+  public class Main {
+    public static void main(String[] args) {
+  	HashMap<String, String> cities = new HashMap<String, String>();
+  	
+        // Add keys and values (Country, City)
+      cities.put("England", "London");
+      cities.put("Germany", "Berlin");
+      cities.put("Norway", "Oslo");
+      cities.put("USA", "Washington DC");
+      System.out.println(capitalCities);
+        
+    	}
+  }
+  ```
+
+  
 
 
 ## Maven 的安装
