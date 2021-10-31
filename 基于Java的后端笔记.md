@@ -975,9 +975,222 @@ ArrayList<String> cars = new ArrayList<String>();
       cities.put("Germany", "Berlin");
       cities.put("Norway", "Oslo");
       cities.put("USA", "Washington DC");
-      System.out.println(capitalCities);
+      System.out.println(cities);
         
     	}
+  }
+  ```
+
+  - 注意增加元素用的是put()函数.
+  
+- 要访问元素用get("England")函数, 括号中要输入请求的数据名称, 删除也是同理, remove()函数括号中要输入数据名称, String也一样要用引号. 只有删除所有元素的clear()函数不需要参数.
+
+- 同样也可以用size()函数返回元素对数量.
+
+- 同样可以用for-each 循环历遍所有元素, 但是有两个函数, 一个是历遍名称, 一个是历遍值. 示例:
+
+  ```java
+  for (String i : cities.keySet()) {
+    System.out.println(i);
+  }
+  
+  for (String i : cities.values()) {
+    System.out.println(i);
+  }
+  ```
+
+  - 如果需要两个都显示, 用下面的方法:
+
+  ```java
+  for (String i : cities.keySet()) {
+    System.out.println("key: " + i + " value: " + cities.get(i));
+  }
+  ```
+
+- 和前面一样, HashMap 存储的都是对象, 要使用其他数据格式, 要使用 wrapper class, 例如Integer Boolean Character 和Double. 建立HashMap的语句: ` HashMap<String, Integer> people = new HashMap<String, Integer>();`
+
+#### HashSet 哈希集合
+
+- 哈希集合也是一种类似的数据, 但是就像数学中的集合一样, 里面的元素是不能重复的. 同样需要 ` java.util.HashSet`这个包. 创建语句为: ` HashSet<String> cars = new HashSet<String>();` 这个语句创建了一个存储String的HashSet.
+
+- Hash Set里面不存在重复的元素, 所以不需要数字或者名称来定位元素, 直接写出元素的值就可以定位. 
+
+- 要增加元素直接用add()函数即可.
+
+- 由于不存在重复元素, 所以提供了函数来检查某个元素是否存在: contains(), 他的返回值是boolean的. 其实前面的几个列表数据格式也有这个函数.
+
+- remove()函数也可以直接删除, 不需要提供序号. 同样有clear()函数. 也可以查看大小size().
+
+- 也可以历遍所有的元素, 写法都一样.
+
+- 也可以存储各种数据, 也要用wrapper class.
+
+  示范代码:
+
+  ```java
+  import java.util.HashSet;
+  
+  public class Main {
+    public static void main(String[] args) {
+          HashSet<String> car = new HashSet<String>();
+          car.add("Volvo");
+          car.add("BMW");
+          car.add("Ford");
+          car.add("BMW");
+          car.add("Mazda");
+  
+          System.out.println(car.contains("Mazda"));//检查是否存在元素
+          for (String i : car) {
+              System.out.println(i);
+          }
+    }
+  }
+  ```
+
+#### Iterator 历遍 class
+
+- Iterator class 也是 ` java.util`里面的一个class, 他的意思就是历遍的意思. 用来历遍ArrayList 或者HashSet之类的东西. 列表类的的对象都内置了一个函数 iterator(), 他的返回值就是所有列表里面的对象. 返回的对象们就要用iterator 对象来接收, 以前面的 ArrayList 为例, 代码:
+
+  ```java
+  Iterator<String> it = cars.iterator();
+  ```
+
+  - 这个新建的 it 对象有一些函数来处理这些元素.
+
+  - next()会返回第一个__对象__.  也就是说如果返回的数据是整数的话, 要用 Integer 对象来接收, 而不是 int. 代码: ` System.out.println(it.next());`, 但是重复执行这个代码会输出下一个元素, 并不会输出同一个元素.
+
+  - 函数hasNext()会返回一个boolean值指示是否还存在下一个元素, 用这个就可以历遍所有的元素, 代码:
+
+    ```java
+    while(it.hasNext()) {
+      System.out.println(it.next());
+    }
+    ```
+
+- Iterator的特性可以让他在历遍时删除特定的元素, 代码:
+
+  ``` java
+  import java.util.ArrayList;
+  import java.util.Iterator;
+  
+  public class Main {
+    public static void main(String[] args) {
+      ArrayList<Integer> numbers = new ArrayList<Integer>();
+      numbers.add(12);
+      numbers.add(8);
+      numbers.add(2);
+      numbers.add(23);
+      Iterator<Integer> it = numbers.iterator();
+      while(it.hasNext()) {
+        Integer i = it.next();
+        if(i < 10) {
+          it.remove();
+        }
+      }
+      System.out.println(numbers);
+    }
+  }
+  ```
+
+  - 在这个例子里面, 如果用for loop或者for-each loop 去删除小于10 的整数是不能正常运行的, 因为for-each loop 需要的历遍源必须是一个阵列(array), iterator并不是array, 而是一个单独的类型. 要使用for loop来历遍这个iterator, IDE给出的方法是这样:
+
+    ```java
+            for (Iterator<Integer> iterator = iter; iterator.hasNext(); ) {
+                Integer i = iterator.next();
+            }
+    ```
+
+    这样看起来并不简洁, 阅读也不如上一种容易.
+
+#### Java wrapper classes 包装类
+
+- 包装类的意义是要把基础的数据类型变成对象类型来使用. 用法就是将类型的第一个字母大写, 除了 int 变成 Integer, 还有 char 变成 Character.
+
+- 有时必须要使用包装类型, 因为有些函数只接受对象, 不能接受纯数据. 例如集合类的对象, ArrayLiat, HashSet等等, 他们只能储存对象.
+
+- 包装类对象的定义方法和基础类型是一样的, 要获取他们的数据, 使用方法也是一样的. 例如:
+
+  ```java
+      Integer myInt = 5;
+      Double myDouble = 5.99; //这里不需要d在结尾.
+      Character myChar = 'A';
+      System.out.println(myInt);
+      System.out.println(myDouble);
+      System.out.println(myChar);
+  ```
+
+- 这些毕竟是对象不是数据, 所以也自带了一些函数. 可以使用这些函数去获取他们的值: `intValue()`, `byteValue()`, `shortValue()`, `longValue()`,  `floatValue()`, `doubleValue()`, `charValue()`, ` booleanValue()`
+
+- 还有个很有用的函数是 `toString()`函数, 可以让输出的数据转成字符串, 比较常用. 代码: ` Integer myInt= 10000;  myInt.toString();`
+
+#### Java的异常处理 exception
+
+- 程序运行是会出错的, 常见的错误就是输入类型错误. 需要整数的时候输入了字母就会出错.
+
+- try and catch 语句就是为了处理这种情况的.  分为两块代码, 一块正常处理, 一块处理异常, Exception e 就是异常的信息存储的对象. 例如:
+
+  ```java
+  try{
+      //正常的代码
+        int[] myNumbers = {1, 2, 3};
+        System.out.println(myNumbers[10]);
+  }
+  catch(Exception e) {
+      //出错的解决方法
+      System.out.println("Something went wrong.");
+  } finally{
+      System.out.println("The 'try catch' is finished.");
+  }
+  ```
+
+  - 以上代码不用 try - catch 语句会报错, 因为阵列不存在10号元素, 使用了异常处理语句就会输出一个错误信息.
+  - 然后还可以加入 ` finally`语句, 意思是不管是否出错, 都执行里面的语句.
+
+- 对于输入的错误处理, 当读取输入时经常会输错信息, 例如需要数字而输入了字母, 在catch语句中的写法如下:
+
+  ```java
+  import java.util.Scanner;
+  public class Main {
+  
+      public static void main(String[] args) {
+          // input handle
+          Scanner myObj = new Scanner(System.in);
+          System.out.println("Enter name, age and salary:");
+          String name = myObj.nextLine();
+          int age = 0;
+          try { //Exception handle
+              age = myObj.nextInt();
+          } catch (Exception e) {
+              myObj.next();//empty the input buffer
+              System.out.println("This is not a whole number. Try again:");
+              age = myObj.nextInt();
+          }
+          double salary = 0;
+          try {
+              salary = myObj.nextDouble();
+          } catch (Exception e) {
+              myObj.next();//empty the input buffer
+              System.out.println("This is not a number. Try again:");
+              salary = myObj.nextDouble();
+          }
+          System.out.println("Name: " + name);
+          System.out.println("Age: " + age);
+          System.out.println("Salary: " + salary);
+      }
+  }
+  ```
+
+  - 以上代码就是要求输入名字, 年龄(整数), 工资(浮点数). 名字可以任意输入, 年龄如果输了小数或者字母, 就会执行catch语句, 其中有一句 ` myObj.next();`作用是清空输入缓冲区, 不然后面的再次读取输入就会读取到先前的输入而再次产生错误.
+
+- throw 关键词可以生成你想要输出的错误信息. 错误信息有很多种, 例如 `ArithmeticException`,  `FileNotFoundException`, `ArrayIndexOutOfBoundsException`, `SecurityException`等. 使用throw时要提供错误种类和自订的错误信息. 代码:
+
+  ```java
+  public class Main {
+    static void checkAge(int age) {
+      if (age < 18) {
+        throw new ArithmeticException("Access denied - You must be at least 18 years old.");
+      }
+    }
   }
   ```
 
