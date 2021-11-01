@@ -1194,7 +1194,164 @@ ArrayList<String> cars = new ArrayList<String>();
   }
   ```
 
+#### Java  Regular Expressions 正则表达式
+
+- 正则表达式是用类似通配符的形式来表达一些文字的通用形式, 在搜索, 替换字符时很常用.  缩写为regex.
+
+- 正则表达式可以是一个字符, 也可以多个字符组合来表达复杂的意思.
+
+- 使用正则表达式要引入 ` java.util.regex`包. 里面包含三个class:
+
+  - Pattern class, 用来定义一个样式
+  - Matcher class, 用来根据样式寻找文字.
+  - PatternSyntaxException class, 用来产生错误信息.
+
+- 例子, 检查一个句子里是否含有特定的字符串"year": 
+
+  ```java
+  import java.util.regex.Matcher;
+  import java.util.regex.Pattern;
   
+  public class Main {
+    public static void main(String[] args) {
+      Pattern pattern = Pattern.compile("year", Pattern.CASE_INSENSITIVE);
+      Matcher matcher = pattern.matcher("1963 is a very good year!");
+      boolean matchFound = matcher.find();
+      if(matchFound) {
+        System.out.println("Match found");
+      } else {
+        System.out.println("Match not found");
+      }
+    }
+  }
+  ```
+
+  - 函数 ` Pattern.compile()`用来创建一个新的正则表达式, 第一个参数是表达式, 第二个参数是可选的, 意思为是不区分大小写. 不写的话默认区分大小写. 这个地方还可以传入其他的flag, 常见的有` Pattern.LITERAL`,  特殊字符当作字符串的一部分, 而不是当作通配符或者控制符来解释. ` Pattern.UNICODE_CASE`  这个flag和 ` CASE_INSENSITIVE`一起用, 就可以忽略其他非用于字母的大小写.
+  - 函数 ` matcher()`用来搜索一个字符串是否包含指定的表达式内容, 他的返回值并不是一个boolean类型, 而是一个Matcher 对象, 里面不仅包含了搜索的结果的真假, 还有一些其他的信息.
+  - 搜索结果的真假存放在 Matcher对象的find()函数中, 调用这个函数就会返回boolean值告诉你搜索是否成功.
+
+- 正则表达式的写法: 注意全部要由双引号包裹.
+
+  - [abc] 含有abc任意一个字符就可以匹配成功
+  - [^abc] 不含有abc中的任意一个就能匹配成功
+  - [0-9] 含有0-9的任意一个就能匹配成功
+
+- 通配符:
+
+  - | 用来分隔多个正则表达式, 只要有一个匹配成功就算是匹配成功
+  - .  匹配任意单个字符, 除了控制符号
+  - ^ 表示开头, ^hello 表达式意思就是以hello开头, 注意要和方括号里面的用法区分开
+  - $ 表示结尾, id$, 意思就是以id结尾
+  - \d 表示一位数字
+  - \s 表示一个空格
+  - \b 表示开头或者结尾, 比如 \bnew 就表示 ^new 或者new$
+  - \uxxxxx 表示unicode的十六进制编码
+
+- 数量符号
+
+  - n+ 任意数量的字符串, 最起码含有一个n
+  - n* 任意数量的字符串, 含有0个或以上n
+  - n? 任意数量的字符串, 含有0 个或1一个n
+  - n{x} 任意数量的字符串, 含有连续的x个n
+  - n{x,y} 任意数量的字符串, 含有连续的 x-y个n
+  - n{x,} 任意数量的字符串, 含有最少x个连续的n
+
+- \ 转义符, 如果要在字符中区别控制符和特殊字符本身, 要使用转义符. 例如要搜索\ 符号, 就要用\\ \表示, 不然就会引起歧义, 电脑以为\后面是控制符. 
+
+#### Java threads 线程
+
+- 线程可以让程序同时进行多项任务, 更加有效率
+
+- 线程可以把复杂的任务放在后台而不用打断主程序.
+
+- 要创建一个线程, 可以继承(extend) 一个Thread class 然后 改写他的run()函数
+
+- 第二种方法创建线程 是 实现(implement)一个 Runnable 的界面(interface)
+
+  两种方法的代码如下:
+
+  ```java
+  //第一种方法
+  public class Main extends Thread {
+    public void run() {
+      System.out.println("This code is running in a thread");
+    }
+  }
+  //第二种方法
+  public class Main implements Runnable {
+    public void run() {
+      System.out.println("This code is running in a thread");
+    }
+  }
+  ```
+
+- 运行一个线程的方式也有两种:
+
+  ```java
+  MyThread.java
+  public class MyThread extends Thread {
+      public void run() {
+          System.out.println("This code is running in a thread");
+      }
+  }
+  
+  class ThreadRun implements Runnable {
+      public void run() {
+          System.out.println("This code is running in a thread");
+      }
+  }
+  ```
+
+  ```java
+  Main.java  
+  package com.company;
+  
+  public class Main {
+  
+      public static void main(String[] args) {
+  		// 第一种, 建立新的thread 对象
+          MyThread thread = new MyThread();
+          thread.start();
+          System.out.println("This code is outside of the thread.");
+          // 第二种, 实现runnable接口, 然后将这个接口传入一个空的thread. use the thread from runnable interface
+          ThreadRun obj = new ThreadRun();
+          Thread threadRun = new Thread(obj);
+          threadRun.start();
+          System.out.println("This code is outside of the thread");
+      }
+  }
+  ```
+
+  - 这两种本质是一样的, 因为Java的thread class本来就是runnable的一个实现.
+  - 运行的结果来看, 线程是后台运行, 优先级似乎比较低, 在主程序输出了以后, 线程才运行.
+  - 这两种方法的区别在于, 如果是实现Runnable接口的方式,  你还可以从别的class继承代码, 而如果你是继承Theard class, 你就不能再继承别的class了, 因为Java不允许多重继承. 但是接口类允许在继承一次.
+
+- 同时读写的问题(concurrency problem). 因为系统如果同时运行多个线程, 无从得知哪个代码会先运行, 如果线程和主程序在同时写入同一个变量, 结果是无法预料的. 例如下面的这个例子:
+
+  ```java
+  public class Main extends Thread {
+    public static int amount = 0;
+  
+    public static void main(String[] args) {
+      Main thread = new Main();
+      thread.start();
+      System.out.println(amount);
+      amount++;
+      System.out.println(amount);
+    }
+  
+    public void run() {
+      amount++;
+    }
+  }
+  ```
+
+  - 这个例子在我的环境下运行的结果是, 两次输出分别输出了 0 和 1 . 也就是说输出的时候只有主线程在运行, 后台线程的运行结果根本没有反映出来. 加上后台线程的运算结果应该是2才对. 但是不同环境下这个结果可能不一样.
+  - 为了避免这种无法预料的情况, 应该尽可能避免在不同线程之间共享变量. 如果一定要共用变量, 一种方式是用线程的 ` isAlive()` 函数检查线程是不是已经运行完毕, 运行完毕以后再读写.
+
+#### Java Lambda expression `λ`表达式(匿名函数)
+
+- 
 
 
 ## Maven 的安装
