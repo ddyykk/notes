@@ -1351,7 +1351,9 @@ ArrayList<String> cars = new ArrayList<String>();
 
 #### Java Lambda expression `λ`表达式(匿名函数)
 
-- 
+- λ 表达式就是一段代码, 可以输入参数, 也可以返回数据, 跟函数很相似, 但是他们不需要命名, 所以也叫匿名函数. 他们也可以在其他的函数中间使用.
+- 最简单的 λ 表达式是 `parameter -> expression `, 如果有多个参数, 用括号包裹: ` (parameter1, parameter2) -> expression`
+- 表达式本身有一些限制, 他们必须能马上返回数据, 而不能包含变量, 也不能赋值, 也不能用条件语句和循环. 如果语句比较多也可以用大括号, 如果有输出, 那么必须要有 return 语句. (因为在定义的适合不需要指定返回类型)
 
 
 ## Maven 的安装
