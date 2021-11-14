@@ -1352,8 +1352,41 @@ ArrayList<String> cars = new ArrayList<String>();
 #### Java Lambda expression `λ`表达式(匿名函数)
 
 - λ 表达式就是一段代码, 可以输入参数, 也可以返回数据, 跟函数很相似, 但是他们不需要命名, 所以也叫匿名函数. 他们也可以在其他的函数中间使用.
+
 - 最简单的 λ 表达式是 `parameter -> expression `, 如果有多个参数, 用括号包裹: ` (parameter1, parameter2) -> expression`
-- 表达式本身有一些限制, 他们必须能马上返回数据, 而不能包含变量, 也不能赋值, 也不能用条件语句和循环. 如果语句比较多也可以用大括号, 如果有输出, 那么必须要有 return 语句. (因为在定义的适合不需要指定返回类型)
+
+- 表达式本身有一些限制, 他们必须能马上返回数据, 而不能包含变量, 也不能赋值, 也不能用条件语句和循环. 如果语句比较多也可以用大括号, 如果有输出, 那么必须要有 return 语句. (因为在定义的时候不需要指定返回类型)
+
+- 通常lambda 表达式是当作一个参数传递给其他函数的, 示例: 
+
+  ```Java
+  import java.util.ArrayList;
+  
+  public class Main {
+    public static void main(String[] args) {
+      ArrayList<Integer> numbers = new ArrayList<Integer>();
+      numbers.add(5);
+      numbers.add(9);
+      numbers.add(8);
+      numbers.add(1);
+      numbers.forEach( (n) -> { System.out.println(n); } );
+    }
+  }
+  ```
+
+  - 在这个例子中, forEach()函数里面的匿名函数就是当作一个参数, 这个参数叫做一个action. 就是会把一个动作传递给函数内部元素让他们执行这个动作.
+
+- 如果一个lambda 表达式要反复使用, 也可以将他存入一个变量, 这个变量的类型是interface, 并且里面只有一个函数, 因为匿名函数无法用名字去区分它们. 就是这样的代码, java中含有很多这样的内置interface: 
+
+  ```java
+  import java.util.function.Consumer;    
+  	...
+  	Consumer<Integer> method = (n) -> { System.out.println(n); };
+      numbers.forEach( method );
+  ...
+  ```
+
+  
 
 
 ## Maven 的安装
