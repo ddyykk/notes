@@ -9,6 +9,7 @@
 ## Docker的使用
 
 - 装完以后可以运行常用命令:
+  - docker run -d -p 80:80 <容器名> -d ( detached 脱离的 )为后台运行, -p 为端口指定, 80:80 是将容器的端口对应本地主机的端口.
   - docker ps 显示运行的容器 -a 为所有本机上的容器(包括没有运行的)
   - docker stop <容器名> 停止运行特定的容器
   - docker rm <容器名> 删除特定的容器
@@ -19,6 +20,7 @@
   - docker container cp [options] CONTAINER:SRC_PATH DEST_PATH 从镜像里面把文件/目录拷贝到本地文件系统
   - docker container exec <镜像名> <命令> 对于特定的镜像, 在镜像里面执行特定的命令, 有了这个命令, 就可以让镜像里面执行命令, 例如备份, 查看文件等等
   - docker exec -it <镜像名> bash , 进入镜像的命令行环境去执行命令
+
 - docker container exec 可以被 docker exec 代替, 两者的作用都是在一个运行的镜像中运行命令. 但是docker run 不一样, 他会每次重新打开一个镜像, 然后运行输入的命令.
 - 有关于 docker  exec 使用的一些注意事项:
   - docker exec 跟的必须是可执行的命令, 例如一个程序的名字, vim bash 之类的, 如果要执行一系列的程序之间还要用`&&`之类的就不行, 会被docker当成多个参数, 而不是 一个完整的命令. 如果要执行一系列的命令, 最好写成字符串用引号包裹, 由 sh 来调用. 如果命令太多就写成脚本文件.
