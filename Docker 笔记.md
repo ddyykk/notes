@@ -4,7 +4,8 @@
 
 - old version: `sudo apt install docker.io`
 - new version: `sudo apt install docker-ce docker-ce-cli containerd.io`其中ce指的是community edition
-- 我实际安装时提示找不到包, 按照官网提示, 手动下载三个包使用dpkg 安装
+- 我实际安装时提示找不到包, 按照官网提示, 手动下载三个包使用dpkg 安装, 安装步骤比较多, 参考官网文档.
+- 有时安装完需要重启才会正常运行.
 
 ## Docker的使用
 
@@ -20,12 +21,13 @@
   - docker container cp [options] CONTAINER:SRC_PATH DEST_PATH 从镜像里面把文件/目录拷贝到本地文件系统
   - docker container exec <镜像名> <命令> 对于特定的镜像, 在镜像里面执行特定的命令, 有了这个命令, 就可以让镜像里面执行命令, 例如备份, 查看文件等等
   - docker exec -it <镜像名> bash , 进入镜像的命令行环境去执行命令
-
 - docker container exec 可以被 docker exec 代替, 两者的作用都是在一个运行的镜像中运行命令. 但是docker run 不一样, 他会每次重新打开一个镜像, 然后运行输入的命令.
 - 有关于 docker  exec 使用的一些注意事项:
   - docker exec 跟的必须是可执行的命令, 例如一个程序的名字, vim bash 之类的, 如果要执行一系列的程序之间还要用`&&`之类的就不行, 会被docker当成多个参数, 而不是 一个完整的命令. 如果要执行一系列的命令, 最好写成字符串用引号包裹, 由 sh 来调用. 如果命令太多就写成脚本文件.
   - 如果docker exec 执行的命令会进入一个环境进行进一步操作的话, 要带上参数 -i -t, i 是interactive, 系统会传入STDIN 流, 意思就是会传输用户输入进去, 默认没有输入能力就无法在里面的环境里使用. -t的作用是会生成一个虚拟的终端, 没有终端会没有命令提示符等一些环境.
   - 例如 以下命令要调用一个docker 容器里面的mongodb 数据库的shell 后台, 执行成功之后会立即退出: `docker exec mongo_1 mongosh`, 因为没有 `-it`这两个参数. 如果带上这两个参数就可以顺利进入新环境.
+- 执行命令时如果出现提示信息: pid file found, ensure docker is not running or delete /var/run/docker.pid 意思是这个已经在运行了.
+- 以拷贝文件的方式得来的 docker 镜像, 要用 docker load 命令加入进去 image 库才能用.
 
 # docker-compose
 
