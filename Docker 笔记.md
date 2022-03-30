@@ -28,6 +28,7 @@
   - 例如 以下命令要调用一个docker 容器里面的mongodb 数据库的shell 后台, 执行成功之后会立即退出: `docker exec mongo_1 mongosh`, 因为没有 `-it`这两个参数. 如果带上这两个参数就可以顺利进入新环境.
 - 执行命令时如果出现提示信息: pid file found, ensure docker is not running or delete /var/run/docker.pid 意思是这个已经在运行了.
 - 以拷贝文件的方式得来的 docker 镜像, 要用 docker load 命令加入进去 image 库才能用.
+- docker tag <镜像名> <tag名> 可以用来给镜像起名字
 
 # docker-compose
 
