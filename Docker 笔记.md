@@ -18,7 +18,7 @@
   - docker rmi <镜像名> 删除特定镜像文件
   - docker run <镜像名> <版本号> 运行特定镜像, 如果本地没有就会从网站下载, 如不指定版本号默认用最新版
   - docker pull <镜像名> <版本号> 下载特定的镜像
-  - docker container cp [options] CONTAINER:SRC_PATH DEST_PATH 从镜像里面把文件/目录拷贝到本地文件系统
+  - docker container cp [options] CONTAINER:SRC_PATH DEST_PATH 从镜像里面把文件/目录拷贝到本地文件系统, 也可以把文件拷入镜像. 只要把镜像名和本机路径对调就可以.
   - docker container exec <镜像名> <命令> 对于特定的镜像, 在镜像里面执行特定的命令, 有了这个命令, 就可以让镜像里面执行命令, 例如备份, 查看文件等等
   - docker exec -it <镜像名> bash , 进入镜像的命令行环境去执行命令
 - docker container exec 可以被 docker exec 代替, 两者的作用都是在一个运行的镜像中运行命令. 但是docker run 不一样, 他会每次重新打开一个镜像, 然后运行输入的命令.
@@ -35,3 +35,5 @@
 - docker-compose 是一个库, 使用一个 .yaml ( 或者 .yml )文件来组合多个容器, 类似脚本. 
   - .yml 文件要指定里面组件的版本, 可参考官方文档.
 - docker registry 是一个镜像托管网站, 收录很多镜像供人使用. pull镜像的时候要写名字为 <用户名>/<镜像名>, 如果只写一个, 代表两个名字一样
+
+- 在存在yaml文件的目录使用 docker-compose up 就可以启动一系列配置好的服务, 关闭时把 up 换成 down .
