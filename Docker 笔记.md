@@ -1,11 +1,35 @@
 # Docker 笔记
 
+- 为什么要用docker. 他的使用类似虚拟机, 但是比虚拟机轻量化, 不需要虚拟整个操作系统, 只虚拟了需要的部分. 由于轻量化, 可以多个容器并用, 构建出复杂的多应用合作的app. 如果用虚拟机或者真实的电脑有可能需要多个电脑, 因为有些多应用环境不能在一个电脑上共存.
+
 ## Docker安装(Ubuntu)
 
 - old version: `sudo apt install docker.io`
+
 - new version: `sudo apt install docker-ce docker-ce-cli containerd.io`其中ce指的是community edition
+
 - 我实际安装时提示找不到包, 按照官网提示, 手动下载三个包使用dpkg 安装, 安装步骤比较多, 参考官网文档.
+
 - 有时安装完需要重启才会正常运行.
+
+- 安装包安装完成以后要使用sudo才能调用docker, 要想别的用户也能使用, 要加入新的docker用户:
+
+  1. `sudo groupadd docker` Create the `docker` group.
+  2. `sudo usermod -aG docker $USER` Add your user to the `docker` group.
+  3. Log out and log back in so that your group membership is re-evaluated. 
+
+  - 然后就可以尝试不使用sudo来调用docker.
+
+- docker 开机启动:
+
+  - 在Ubuntu上面默认是自动启动, 在其他发行版上使用下面的命令:
+
+    ```
+     sudo systemctl enable docker.service
+     sudo systemctl enable containerd.service
+    ```
+
+  - 要关闭自启动, 把 enable 换成 disable. 
 
 ## Docker的使用
 
@@ -29,6 +53,38 @@
 - 执行命令时如果出现提示信息: pid file found, ensure docker is not running or delete /var/run/docker.pid 意思是这个已经在运行了.
 - 以拷贝文件的方式得来的 docker 镜像, 要用 docker load 命令加入进去 image 库才能用.
 - docker tag <镜像名> <tag名> 可以用来给镜像起名字
+
+### 自建第一个docker容器
+
+- 建立一个任意文件夹, 此处我建立了dockertest, 在文件夹中随意放入一个文本文件, 这里我放入test.txt,  里面有一些任意内容即可.
+
+- 在dockertest文件夹下面建立Dockerfile文件: ` touch Dockerfile`, 记得D要大写. 文件中写入下列内容:
+
+  ```
+  FROM ubuntu:20.04
+  #意思是建立一个基础虚拟的环境, 安装Ubuntu 20.04
+  
+  WORKDIR /home/johnson/dockertest/
+  #在这个虚拟的环境里, 建立上面的路径作为默认的工作目录
+  
+  COPY . /home/johnson/dockertest/
+  #将本机当前目录的内容copy至虚拟环境的指定路径. 注意参数的写法, 第一个参数是本机目录, 第二个是目标(虚拟 #环境)
+  CMD cat ./test.txt
+  #默认的命令是显示test.txt的内容
+  
+  
+  ```
+
+  - 凡是`.`代表的当前目录都是指Dockerfile文件所在的目录, 虚拟环境里面的`. `目录指的就是默认的工作目录. 所以COPY那一行写作 `COPY . .`也可以.
+  - 可以看到Dockerfile都是这样一个命令对应一些操作的书写方式, 前面的命令不需要大写, 但是官方推荐大写, 这样容易与命令参数区分开.
+
+- 接下来开始构建我们自己的镜像, 命令为`docker build -t johnson/first .` -t 参数是给构建的镜像命名, 命名方式是斜杠前面为组织公司名, 后面为具体的app名称, 只写一个代表两个名称一样. 最后的`.` 代表Dockerfile的路径, 改成对应的即可.
+
+- 然后应该开始工作, 构建成功, 使用命令 ` docker images` 就可以看到刚才构建好的镜像.
+
+- 然后使用命令 ` docker run johnson/first` 就可以看到 test.txt 的内容被输出了. 说明镜像的构建是成功的, 这个构建出来的镜像应该可以在所有的Linux电脑上运行, 无需安装任何我的电脑上的组件, 因为所有需要的组件理论上来说都被打包构建进入了镜像, 他的里面包含了所有需要的文件. 打包的镜像尺寸是78mb, 只是一个文件, 里面基本包含了一个Ubuntu的环境, 从这个角度来看还是很小的. 
+
+- 可以使用命令 ` docker run -it johnson/first bash` , 进入镜像的环境内部去查看里面的文件结构, 默认进去的目录就应该是我们指定的目录. 此处不能用 `docker exec`因为我们的镜像并没有在运行, 必须要开启新的镜像. 默认的镜像会在运行完默认命令后自动退出. 除非有某些进程会一直保留, 类似服务器或者bash这一类需要手动退出的.
 
 # docker-compose
 
