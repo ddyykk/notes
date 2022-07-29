@@ -23,6 +23,8 @@
 - 系统设置存放在 `/etc/profile/ `. 用户设置存放在 `~/.profile`. 命令行工具的设置存放在 `~/.bashrc`
 - 几个常用的系统变量。终端的类型 `$TERM`. 多个系统目录 `$PATH`.  当前用户的文件夹。`$HOME`. 当前语言。`$LANG`.  产生一个随机数。`$RANDOM`. 系统的时区。系统所在的时区。`$TZ`.  用户ID。`$UID`. 命令提示符的格式。`$PS1`.
 - 在图形界面中 `sudo init 3` 则关闭图形界面. ` sudo init 5`进入图形界面。
+- 常用的命令 `Ctrl+c`, 强制退出当前任务.
+- Linux区分大小写.
 
 ## Linux的安装
 
@@ -40,7 +42,12 @@
 - 改变文件的所有者。`chown <目标用户名或者ID> <文件名>`
 - 改变文件的用户组。`chgrp <目标用户名或者ID> <文件名>`
 - 当前路径。`pwd`
-- 显示文件内容。`cat` 参数`-b`, 显示行号。如果不加任何文件路径就会自动回显输入的内容。
+- 显示文件内容。`cat` 参数`-b`, 显示行号。如果不加任何文件路径就会自动回显输入的内容。参数 `-A` 列出所有隐藏符号. `-n`列出行号. `-b` 行号只对非空的行有效.
+  - 将两个文件合成第三个 `cat <file1> <file2> > <file3>`
+
+- 可以用 ` more`和`less`来代替`cat`查看文件, 他们提供了翻页功能. 使用空格翻下一页, 回车下一行, d 向下半页, b向上一页, q 退出. `/+<正则表达式>`来进行搜索. 其中less 可以加参数 `-N`来显示行号.
+- 使用 `tail -f` 会一直刷新显示文件末尾. 用来监听某个文件的修改. 退出只能用 `Ctrl+c`. 参数 `-<n>`会显示末尾的 n 行.
+- 命令行音乐播放器, 需要安装. ` sudo apt install cmus`, 装好可以直接使用cmus. 进去以后 `:set <path>`添加路径. `+-`控制音量, 左右是快进/快退, `< >`也是快进快退. `q`是退出, `Tab`是光标寻址.
 - 回到上一级文件夹。`cd ..`  后退到上一个访问的目录`cd -`
 - 输入的内容不可见。`Ctrl+s`  重新显示输入的内容`Crtl+q`
 - 为某个命令设置别名, 用来简化输入`alias <命令> = '别名'`
@@ -62,7 +69,7 @@
 - 在命令的结果中查找 `<命令> | grep "keyword"`在前面命令输出中查找关键字并返回所在的行。
 - 显示所有监听的网络端口 `netstat -an | grep "LISTENING"` . `netstat`命令用来显示网络状况。类似的命令还有`ss`, 可以用来查看端口信息常用的参数为: `-n` 不解析服务名称只显示端口号。`-l` 显示监听。`-t`仅显示TCP。`-u` 仅显示udp。`-p` 显示使用端口的进程。
 - 显示CPU信息。`cat /proc/cpuinfo`. 显示内存信息。`cat /proc/meminfo`
--  PCI总线的设备信息, 网卡声卡，显卡等。`lspci` .  USB总线的信息。`lsusb`
+- PCI总线的设备信息, 网卡声卡，显卡等。`lspci` .  USB总线的信息。`lsusb`
 - 获取管理员权限(切换当前用户为管理员) `sudo -i`,然后输入密码。如果要退出管理员 `Crtl+d`
 - 远程登录其他Linux主机 `ssh -i <private key> <host name>@<address>`, 如果不需要使用密钥就去掉参数 `-i <private key>`，只写主机&地址，用密码登录即可。默认端口22。可使用参数`-P <端口号>`来更改登录的默认端口(在已知服务器端默认端口被更改的情况下)。
   - 生成新的密钥对 ` ssh -keygen -t rsa` . rsa为指定的加密方式。
@@ -120,7 +127,27 @@
 - 显示一个软件包是否安装等信息。`apt show <package>`. 查看软件包安装位置。`dpkg -L <package>`
 - 使用命令行时内容太多可以在末尾加上 `|more` 或者 `|less` 用来分屏。
 
+- 如果需要开机自动运行某些命令, 可以将命令加入 ~/.profile 文件, 用户登录就会自动调用这个文件. ~/.bashrc 中保存了bash的设置, 包括命令提示符的内容和颜色等.
+
+- 可以直接定义变量: ` x=9998`, 使用的时候直接用 x 即可. 这样定义的变量是局部变量, 除了当前的bash程序以外别的程序无法访问, 需要使用 export 命令导出为全局变量才可以. 在使用变量的时候要加上 $ 符号。
+
+- 压缩文件并生成同样后缀的压缩包。`tar ` `gzip` `bzip` `zip` 这几个都是压缩和解压缩软件。具体使用方法可以参考说明文件。
+
+- 查看移动设备的电量，例如笔记本电脑。先安装acpi。 `sudo apt install acpi ` . 然后使用 `acpi` 命令即可。
+
+- 文字界面下的声卡和音量控制。安装 ` alsa-utils `. ` alsamixer gui`, 是文字界面的混音台，可以用来控制音量。要用命令控制音量: ` amixer -c 1 set Speaker x%`. 控制耳机音量: ` amixer -c 1 get Speaker(Headphone)`. 命令里面的数字1是声卡的编号。可使用命令 `alsamixer` 来查看。
+
+- 查看IP地址。`ip addr`
+
+- 查看某个进程的进程号。或者验证该进程是否存在。` pidof <name of programme>`, 例如 `pidof sshd` 查看ssh进程的进程号。
+
 - wget 默认下载到当前目录, 可以输入多个地址用空格隔开. 要制定输出目录要用 -O 参数.
+
+## 一些应用专题
+
+### ls 应用案例
+
+- ` ls -l | grep "Aug" | sort +4n | more`. 符号 `|` 表示将前一个命令的结果传递到下一个命令. 这个命令的意思是, 列出当前目录的文件, 并且显示详细信息. 然后只显示其中含有 'Aug' 的行. 并且以第4列来排序 (文件大小). 并且对结果自动分页. 空格键为下一页, b 为上一页.
 
 ###  nmcli 命令(Network-manager command line interface)
 
@@ -129,7 +156,97 @@
 - 显示目前的网络状况。`nmcli general status` 或者 `nmcli dev status`
 - 显示存在过的连接。`nmcli connection show`
 
-##   Linux下用GCC编译C语言单个文件
+### New Zealand Ubuntu 下载镜像源, 解决下载失败问题
+
+- 使用文字编辑器编辑 ` sudo vim /etc/apt/sources.list`. 除了最后三个以外, 在服务器域名前加`nz.`。最后三个前面加 `security.`
+
+### 纯文字命令行下面的一些用法(非SSH或者Terminal)
+
+- 设置文字界面的字体大小. 安装 ` sudo apt install console-setup`. 然后运行 ` sudo dpkg-reconfigure console-setup`. 然后选 UTF-8, 字符集自动, 字体可以用 Terminus, 尺寸选最大.
+- 纯文字界面下也可以切换多个命令行(同时运行多个命令), 最多可以用6个. ` Crtl+Alt+(F1-F6)`
+
+###  ssh的配置
+
+-  apt安装sshd。装完一般会自动启动，如果没有自动启动，手动启动的路径为 `/usr/sbin/sshd`
+
+- 安装完以后就可以在别的电脑使用账号密码登录。主机地址使用IP地址就可以。
+
+- 登录后在`~/.ssh`目录下建立一个文件 `touch authorized_keys`, 然后用vim或者nano等编辑器将公钥粘贴进去即可无密码登录。这样服务端的配置就完成了。如果需要更多的配置可以去配置文件。里面可以禁用密码登录, 和更改登录的端口。建立客户机白名单黑名单等等。进行此类操作时，建议留一个自己备用的登录方法，以防无法登录的时候，作为补救手段，如果因为意外禁用掉了所有的登录方式，自己也无法登录到机器。
+
+- 然后在客户端进行配置，可以快速登录。在客户端的 `~/.ssh` 文件夹下建立 `config`文件，填写服务器信息。可以将服务器的名称和IP地址等存储在里面。
+
+  ``` bash
+  Host <host nick name>
+  HostName <host address>
+  User <user name>
+  Port <22> #默认端口22，如果没有修改服务器端的设置，此处可以省略。
+  ```
+  
+  保存完成以后，使用命令 `ssh <nick name>` 就可以登录。
+
+### 配置内网固定IP
+
+- 在图形界面里按照提示操作即可，只对单个无线信号起作用。
+- 在命令行下配置文件在 `/etc/NetworkManager/system-connctions`. 每一个无线SSID会有单独的一个配置文件。
+- 一些旧的系统中用来管理无线网的是 `netplan`。在Ubuntu 20:04下已经交由Network Manager管理，所以配置文件位置改变了。
+- 进入配置文件以后，在 [ipv4] 的字段:
+
+```bash
+[ipv4]
+address1 = 192.168.x.xxx/24,192.168.x.x
+#前面一个IP地址为自己想要的固定IP，24子网掩码，后面一个IP地址为网关地址。
+dns = 192.168.x.x
+method = manual
+```
+
+​	然后保存退出即可。
+
+- 还有一种办法是在路由器上面设置 IP 绑定设备。
+
+### 文件服务器 (Samba)
+
+- 先用apt安装samba。
+- 打开配置文件。` sudo vim /etc/samba/smb.conf`. 在文件末尾加上如下
+
+```bash
+[sambashare]
+comment=<description of sharing>
+path=<path to the sharing folder>
+read only = yes/no
+browsable = yes
+```
+
+​	路径最好写绝对路径，不要写相对路径。保存退出。
+
+- 配置完以后要重新启动服务，配置才会生效。` sudo service smbd restart` 或者 ` sudo systemctl restart smbd.service`. 每次修改配置文件都需要运行此命令。
+
+- 系统防火墙为文件服务器开启端口。` sudo ufw allow samba`
+
+- 设置文件服务器的密码。用下面的命令设置对应用户名的密码，用户名为Linux的用户名。` sudo smbpasswd -a <username> <password>`
+
+-  Windows下访问samba文件服务器。在资源管理器而不是浏览器地址栏填入 `\\<address>`。
+
+- 也可使用苹果手机和电脑访问samba文件服务器。但是新的系统对samba支持不好，可能会有访问问题或者是无法在上面保存文件。解决方法是引入一份苹果的配置。首先安装 VFS 模块。`sudo apt install --no-install-recommends samba-vfs-modules`. 此操作有可能会覆盖配置文件，最好先备份。安装完成后在配置文件的全局设置 [global] 中加上如下语句: 
+
+  ```
+  min protocol = SMB2
+  fruit:delete_empty_adfiles = yes
+  vfs objects = fruit streams_xattr
+  fruit:metadata = stream
+  fruit:model = MacSamba
+  fruit:aapl = yes
+  ```
+
+  然后重启服务。
+
+### 图形界面下的使用(Terminal)
+
+- 关闭和打开图形界面。关闭 ` sudo init 3` ( 即退出图形界面，进入纯文字环境 ). 进入图形界面。` sudo init 5`
+- 安装以后删除桌面环境 ( DE )。`sudo apt remove ubuntu-desktop gnome`. 每个发行版的图形界面名称不一样，需要查找。然后然后运行自动清理。`sudo apt autoremove, purge <DE> , autoclean, clean` 等. 删除了也可以安装回来，只要记住桌面环境的名称。
+- 查看无线网和WiFi的信息。使用 `iwconfig`. 需要安装。
+- 开机不进入图形界面，自动进入文字环境。(ubuntu). 进入修改以下文件。` sudo vim /etc/default grub/`. 把这一行改为这样: `GRUB_CMDLINE_LINUX_DEFAULT = "TEXT"`. 原本的默认应该为 `QUIET SLASH`。保存退出，然后运行 `sudo update-grub` 命令。 然后设置系统服务, 在进入系统时进入服务器模式。` sudo systemctl set-default multi-user.target`. 如果要恢复进入图形界面就把最后一个参数改成 `graphical.target`. 然后用重启 (命令 `sudo reboot`)机器。
+
+###   Linux下用GCC编译C语言单个文件
 
 - 命令是 `gcc -o <输出可执行文件名> <代码文件>`
 
