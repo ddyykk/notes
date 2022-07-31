@@ -34,97 +34,179 @@
 
 ## 常用命令
 
-- `ls` (list)当前文件夹内容。可以加路径显示某个文件夹内容。`-a`参数可显示隐藏文件。`-l`参数可以显示更多信息。`ls -a -l`在很多时候可以简化为`ll`。
+- `ls` (list)当前文件夹内容。可以加路径显示某个文件夹内容。`-a`参数可显示隐藏文件。`-l`参数可以显示更多信息。`ls -a -l`在很多时候可以简化为`ll`。`-h`, 文件大小以更大的单位显示。
+  
   - `ls -l`显示出前面10个字符为权限。例如: `-rwxr-xr--`以三个为一组一共9个，第1位为文件属性。`d`就是文件夹。`l`就是链接或者快捷方式。后面三个显示的为创建者，中间三个为创建者的同一用户组, 最后三个为其他用户。
   - 改变权限: `chmod`. 第1组用户代号为u(user)第2组为g(group)，第3组为o(other)。
   - 例如给第1组用户加读写和执行权限。`chmod u+rxw <文件名>`; 给第2组减去权限的命令: `chmod g-rw <文件名>`.依此类推。如果省略用户的话，默认就是给文件所有者的用户更改权限。
   - 常用的给某一个文件加上执行权限(往往是脚本文件)。`chmod +x <file>`
+  
 - 改变文件的所有者。`chown <目标用户名或者ID> <文件名>`
+
 - 改变文件的用户组。`chgrp <目标用户名或者ID> <文件名>`
+
 - 当前路径。`pwd`
+
 - 显示文件内容。`cat` 参数`-b`, 显示行号。如果不加任何文件路径就会自动回显输入的内容。参数 `-A` 列出所有隐藏符号. `-n`列出行号. `-b` 行号只对非空的行有效.
   - 将两个文件合成第三个 `cat <file1> <file2> > <file3>`
 
 - 可以用 ` more`和`less`来代替`cat`查看文件, 他们提供了翻页功能. 使用空格翻下一页, 回车下一行, d 向下半页, b向上一页, q 退出. `/+<正则表达式>`来进行搜索. 其中less 可以加参数 `-N`来显示行号.
+
 - 使用 `tail -f` 会一直刷新显示文件末尾. 用来监听某个文件的修改. 退出只能用 `Ctrl+c`. 参数 `-<n>`会显示末尾的 n 行.
+
 - 命令行音乐播放器, 需要安装. ` sudo apt install cmus`, 装好可以直接使用cmus. 进去以后 `:set <path>`添加路径. `+-`控制音量, 左右是快进/快退, `< >`也是快进快退. `q`是退出, `Tab`是光标寻址.
-- 回到上一级文件夹。`cd ..`  后退到上一个访问的目录`cd -`
+
+- 回到上一级文件夹。`cd ..`  后退到上一个访问的目录`cd -` . `cd <path>`  改变到路径。`cd` 回到home目录。
+
 - 输入的内容不可见。`Ctrl+s`  重新显示输入的内容`Crtl+q`
+
 - 为某个命令设置别名, 用来简化输入`alias <命令> = '别名'`
+
 - 历史命令`<上箭头>`
+
 - 显示进程树 `pstree` 参数`-p`显示进程编号(uid)。
+
 - 关闭当前进程`Crtl+c`
+
 - 退出某个进程`kill <进程编号>` 强制退出 `killall -SIGKILL`. kill后面需要加进程编号。killall后面需要加的是进程名称，所以不防重名。
+
 - 暂停进程`kill -TSTP <pid>`
+
 - 强制暂停进程 `kill -STOP <pid>`
+
 - 继续进程 `kill -cont <pid>`
+
 - 前台进程转后台并暂停 `Crtl+z` 后台进程继续运行 `bg %<job>` 后台进程转前台进程 `fg`
+
 - 显示后台进程`jobs`
+
 - 查看环境变量 `env`
+
 - 设置环境变量(关机失效) `export <名称>=<值>` 不可以设置重名变量(重名会覆盖原先的设置)
+
 - 复制`cp <source> <destination>` 移动 `mv <source> <destination>`如果两个路径一样，但是文件名不一样，就是重命名。
+
 - 删除 `rm <file>` `-r`参数用来删除目录。这种方式只是标记为空白，并不实际擦除。如果要实际擦除 `shred <file>`
+
 - 新建文件夹 `mkdir <name>`. 命名时可使用变量。{1..10}意思就是建立从1到第10共10个文件夹。或者使用{a..z}/{1..10}他们的组合。`-p` 建立一整条路径，包括子目录。`-m` 可以赋予不同的权限。注意大括号里面只能使用两个点。
+
 - 删除文件夹` rmdir`. 同样可以使用上面的大括号里面的变量。
+
 - 在命令的结果中查找 `<命令> | grep "keyword"`在前面命令输出中查找关键字并返回所在的行。
+
 - 显示所有监听的网络端口 `netstat -an | grep "LISTENING"` . `netstat`命令用来显示网络状况。类似的命令还有`ss`, 可以用来查看端口信息常用的参数为: `-n` 不解析服务名称只显示端口号。`-l` 显示监听。`-t`仅显示TCP。`-u` 仅显示udp。`-p` 显示使用端口的进程。
+
 - 显示CPU信息。`cat /proc/cpuinfo`. 显示内存信息。`cat /proc/meminfo`
+
 - PCI总线的设备信息, 网卡声卡，显卡等。`lspci` .  USB总线的信息。`lsusb`
+
 - 获取管理员权限(切换当前用户为管理员) `sudo -i`,然后输入密码。如果要退出管理员 `Crtl+d`
+
 - 远程登录其他Linux主机 `ssh -i <private key> <host name>@<address>`, 如果不需要使用密钥就去掉参数 `-i <private key>`，只写主机&地址，用密码登录即可。默认端口22。可使用参数`-P <端口号>`来更改登录的默认端口(在已知服务器端默认端口被更改的情况下)。
   - 生成新的密钥对 ` ssh -keygen -t rsa` . rsa为指定的加密方式。
   - 将自己的公钥写入远程主机的已授权客户端中 `ssh-copy-id <host>@<address>`
+  
 - 显示所有已安装的包`dpkg -l`, 或者 `sudo apt list --installed`
+
 - 显示所有进程`ps -e`参数 `-f` 为显示所有信息。
+
 - 退出登录 `Crtl+d`或者 `exit`, `logout`都可以。
+
 - 清除屏幕 `Crtl+l`或者` clear`
+
 - 移除不再需要的软件包 `sudo apt autoremove`
+
 - 查找程序的位置 ` which <程序>` . 也可以使用` command -v <程序>` 或者 `type <程序>`
+
 - 查询内核的版本 `uname -r` 命令本身是用来显示系统信息的。可以使用参数 `-a`来查看所有。常见的参数还有 `-m` 硬件信息， `  -p`处理器信息,  `-i`硬件平台，`-o`操作系统。
+
 - 查找文件的位置 `whereis <文件>`
+
 - 磁盘剩余空间 `df`. `-k`用KB为单位, `-h`使用更易读的格式, `-a`显示所有文件系统。查看内存情况`free`. 查看系统运行状况, 类似于资源管理器` htop`, 如果一些老机器或者精简过的机器没有此命令则用` top`.
+
 - 读取并执行文件中的命令。`source <file>`. 可省略为点`.`。
+
 - 常见的文件编辑器` nano`. 在里面编辑完以后保存`Crtl+o` 然后重命名，无需重命名直接回车。退出`Crtl+x`。
+
 - 常见命令的说明书 `man <命令>`
+
 - 测试某个地址的路由` traceroute <address>`
+
 - 端口扫描器。`nmap <address>`
+
 - 修改当前用户的密码 ` passwd`. 显示当前用户的用户名 ` whoami`
+
 - 显示当前已登录这台电脑的所有用户` users`/ `who`/`w`
+
 - 重启 `sudo init 6`/`reboot`. 安全关闭 ` shutdown`/ `poweroff`
+
 - 统计文件的行数 词数和字节数, 可跟多个文件。` wc <file>`
+
 - 将文件在屏幕上打印出来，但是对阅读进行优化，加入自动间距和换行等。`pr <file>`
+
 - 登录FTP主机进行上传下载。`ftp <server address>`
+
 - 查看文件类型和文件编码。`file <file>`
+
 - 创建一个新的空白文件，如果文件已存在，则改变文件的最后修改时间。`touch <file>`
+
 - 查看系统上挂载的所有磁盘。`mount`
+
 - 查看文件的信息。`stat <file>`
+
 - 域名和地址的互相查找。`host <address>`
+
 - 查找文件。`find`. 例如要从根目录下查找名为<XX>的所有文件并包含子目录。`fine / -name xx`
+
 - 建立到某一个文件的软链接。并且此链接不存在。`ln -s <source> <link>`
+
 - 将光标移动到行首。`Crtl+a`/`home` . 将光标移动到行尾。`Crtl+e`/`end`
+
 - 光标以词为单位移动。`Alt+f`, `Alt+b`
+
 - 显示命令历史。` history` . 在历史命令中搜索 `Crtl+r`. 退出搜索。` Crtl+g`
+
 - 以系统管理员权限执行上一个命令。`sudo !!`, 也就是说 `!!` 就是执行上一个命令。
+
 - 从当前光标剪切至行尾。` Crtl+k`. 从当前光标剪切至行首。`Crtl+u`.  粘贴 `Crtl+y`.
+
 - 进入编辑缓冲区, 可以写入多行命令，保存退出即可执行，会调用默认的编辑器。$EDITOR. ` Crtl+x+e`. 常见的默认编辑器有vim和nano。
+
 - 路由持续追踪一个地址，可以探测链路的节点。` mtr <address>`
+
 - 在本地和远程主机之间传文件。需要使用ssh(命令里面的主机必须是可以进行ssh连接的)。` scp <source> <host>:<path>` . 如果远程路径里面也包含了文件名，就可以在复制的过程中重命名. `-r` 参数复制整个目录。把源和目标调换也可从远程复制到本地。`-P` (大写) 可以指定端口。`-C` (大写) 可以在复制的过程中启用压缩。
+
 - 使用`rsync`传文件, 两台机器都要安装。Ubuntu默认包含这个软件。`rsync -a <source> <host>:<path>`. 参数 `-r` 表示复制文件夹。使用这个命令复制文件到远程机器，默认会跳过重复的文件，而scp不会，这个软件也要使用ssh。
+
 - 添加新用户, 需要root权限。`adduser <name>`
+
 - 测试系统的性能。要使用snap安装。`unixbench`
+
 - 查找占用80端口的进程。`lsof -i tcp:80`
+
 - 查看系统服务的状态。`service <service> status`. 重启某个系统服务。` sudo service network-manager restart` 
+
 - 查看所有服务。`service --status-all`
+
 - 列出所有硬件。`lshw` 列出所有模块。`lsmod`
+
 - 在比较新的系统上，system control ( systemctl ) 已经取代了service命令。启动, 停止和重启服务: ` systemctl start/stop/restart/status <service>`. 如果只输入命令不带参数，会列出系统运行的设备,组件和服务。
+
 - 显示目录占用的空间。`du -sh <path>`. 如果要查看子目录。` du -h --max-depth=<想要查看的层数> <path>`. 以上命令中层数为子目录的层数。如果设为0就只看目录本身。`--max-depth`参数的简化形式是 `-d`。以上命令可以简化为 `du -hd <层数> <path>`
+
 - 如果要查看文件大小 `ls -htla`
+
 - 查看系统服务的日志 `sudo journalctl -fu <service>`
+
 - 关闭蓝牙。`bluetoothctl power off`. 需要安装。
+
 - 挂载一个设备文件到指定的路径。`mount <device> <path>`. 先使用 `sudo fdisk -l` 命令查看磁盘设备信息以及分区名称，然后再挂载到指定目录。要查看已存在的挂载, ` mount -l`. 或者直接查看 `/etc/mtab`文件。
   - 挂载的流程为首先插入磁盘，然后 `fdisk -l ` 查看磁盘地址。然后使用 `mount` 挂载。要移除挂载用 `umount <path>`.
+  
 - 重启控制台, 乱码的时候使用。`reset`
+
 - 显示一个软件包是否安装等信息。`apt show <package>`. 查看软件包安装位置。`dpkg -L <package>`
+
 - 使用命令行时内容太多可以在末尾加上 `|more` 或者 `|less` 用来分屏。
 
 - 如果需要开机自动运行某些命令, 可以将命令加入 ~/.profile 文件, 用户登录就会自动调用这个文件. ~/.bashrc 中保存了bash的设置, 包括命令提示符的内容和颜色等.
@@ -140,6 +222,31 @@
 - 查看IP地址。`ip addr`
 
 - 查看某个进程的进程号。或者验证该进程是否存在。` pidof <name of programme>`, 例如 `pidof sshd` 查看ssh进程的进程号。
+
+- 查看无线网和WiFi的信息。使用 `iwconfig`. 需要安装。
+
+- 把命令运行的结果输出到文件, 使用 `>` 号。` cat name > <file>` . 如果文件已存在，会覆盖。如果使用 `>>` 是追加在文件末尾。
+
+- 如果需要把一个命令留在历史记录里面，但是却不执行，可以用 `#` 把它注释起来。`#XXXXXXX`
+
+- 通配符. `?` 代表任意一位字符。`*` 代表任意长度的任意字符。`[]` 代表括号里面的任意一个字符。`[1-9]` 代表1~9范围内的任意一个。
+
+  - 下面一些举例。
+
+    ```
+    a*
+    #以a开头的任意长度字符串。
+    g*t
+    #以g开头t结尾的任意长度字符串。
+    *e*
+    #包含字母e的任意长度字符串。
+    [abw]*
+    #以a,b或w开头的任意长度字符串。
+    [a-g]*
+    #以a到g之间的字母开头的任意长度字符串。
+    ```
+
+  - 
 
 - wget 默认下载到当前目录, 可以输入多个地址用空格隔开. 要制定输出目录要用 -O 参数.
 
@@ -202,53 +309,67 @@ method = manual
 ​	然后保存退出即可。
 
 - 还有一种办法是在路由器上面设置 IP 绑定设备。
-
-### 文件服务器 (Samba)
-
-- 先用apt安装samba。
-- 打开配置文件。` sudo vim /etc/samba/smb.conf`. 在文件末尾加上如下
-
-```bash
-[sambashare]
-comment=<description of sharing>
-path=<path to the sharing folder>
-read only = yes/no
-browsable = yes
-```
-
-​	路径最好写绝对路径，不要写相对路径。保存退出。
-
-- 配置完以后要重新启动服务，配置才会生效。` sudo service smbd restart` 或者 ` sudo systemctl restart smbd.service`. 每次修改配置文件都需要运行此命令。
-
-- 系统防火墙为文件服务器开启端口。` sudo ufw allow samba`
-
-- 设置文件服务器的密码。用下面的命令设置对应用户名的密码，用户名为Linux的用户名。` sudo smbpasswd -a <username> <password>`
-
--  Windows下访问samba文件服务器。在资源管理器而不是浏览器地址栏填入 `\\<address>`。
-
-- 也可使用苹果手机和电脑访问samba文件服务器。但是新的系统对samba支持不好，可能会有访问问题或者是无法在上面保存文件。解决方法是引入一份苹果的配置。首先安装 VFS 模块。`sudo apt install --no-install-recommends samba-vfs-modules`. 此操作有可能会覆盖配置文件，最好先备份。安装完成后在配置文件的全局设置 [global] 中加上如下语句: 
-
-  ```
-  min protocol = SMB2
-  fruit:delete_empty_adfiles = yes
-  vfs objects = fruit streams_xattr
-  fruit:metadata = stream
-  fruit:model = MacSamba
-  fruit:aapl = yes
-  ```
-
-  然后重启服务。
+- 如果要设置有线网络，要用IP命令。` ip a add <ip_address/mask> dev <interface>`. interface 就是网卡的设备名称。可以使用 `ip a` 命令来查看所有的网络设备名称和状态。默认的子网掩码是24。如果要删除一个绑定的固定IP地址。`ip a del <ip address> dev <interface>`
 
 ### 图形界面下的使用(Terminal)
 
 - 关闭和打开图形界面。关闭 ` sudo init 3` ( 即退出图形界面，进入纯文字环境 ). 进入图形界面。` sudo init 5`
-- 安装以后删除桌面环境 ( DE )。`sudo apt remove ubuntu-desktop gnome`. 每个发行版的图形界面名称不一样，需要查找。然后然后运行自动清理。`sudo apt autoremove, purge <DE> , autoclean, clean` 等. 删除了也可以安装回来，只要记住桌面环境的名称。
-- 查看无线网和WiFi的信息。使用 `iwconfig`. 需要安装。
-- 开机不进入图形界面，自动进入文字环境。(ubuntu). 进入修改以下文件。` sudo vim /etc/default grub/`. 把这一行改为这样: `GRUB_CMDLINE_LINUX_DEFAULT = "TEXT"`. 原本的默认应该为 `QUIET SLASH`。保存退出，然后运行 `sudo update-grub` 命令。 然后设置系统服务, 在进入系统时进入服务器模式。` sudo systemctl set-default multi-user.target`. 如果要恢复进入图形界面就把最后一个参数改成 `graphical.target`. 然后用重启 (命令 `sudo reboot`)机器。
+- 删除桌面环境 ( DE )。`sudo apt remove ubuntu-desktop gnome`. 每个发行版的图形界面名称不一样，需要查找。然后运行自动清理。`sudo apt autoremove, purge <DE> , autoclean, clean` 等. 删除了也可以安装回来，只要记住桌面环境的名称。
+- 开机不进入图形界面，自动进入文字环境。(ubuntu). 进入修改以下文件。` sudo vim /etc/default grub/`. 把这一行改为这样: `GRUB_CMDLINE_LINUX_DEFAULT = "TEXT"`. 原本的默认应该为 `QUIET SLASH`。保存退出，然后运行 `sudo update-grub` 命令。 然后设置系统服务, 在进入系统时进入服务器模式。` sudo systemctl set-default multi-user.target`. 如果要恢复进入图形界面就把最后一个参数改成 `graphical.target`. 然后重启 (命令 `sudo reboot`)。
 
 ###   Linux下用GCC编译C语言单个文件
 
 - 命令是 `gcc -o <输出可执行文件名> <代码文件>`
+
+## Linux 脚本
+
+- 脚本就是将一系列命令写在一个文件里执行。一般的脚本使用 .sh 扩展名, 但任意名字并不影响执行。
+- 脚本有两种运行方式，一文件直接执行，二将文件传递给 bash 执行。
+- 文件直接执行，在文件第一行要指定shell : `#!/bin/bash` .然后再写命令，写完以后要用 `chmod +x <file>` 给文件赋予执行权限。
+- 第2种将文件传递给bash执行的。文件是当做bash的一个参数，这样开头就无需指定shell，即便指定了也无效。用法是 ` bash <file>` 或者 `source <file>` 或者缩写为 `. <file>`
+- 可以在文件内定义变量。`x=999`. 如果变量里面没有空格可以不加引号。等号的两边也不能有空格。在使用变量时要加 "$" 符号, 这是告诉系统后面跟的是一个变量。变量的边界可以由大括号来规定({})。在容易引起误会的情况下，可以用大括号来告诉系统变量到底叫什么，名字排除很多空格的干扰。例如: `x_1="I like to eat food."`, ` echo $x_1--said by me. `. 以上这种情况就容易引起误会，让人看不懂变量到底是哪一个名字。加上大括号以后就会清晰很多。`echo ${x_1}--said by me.`
+- 在定义变量时，单引号中不可以引用其他变量, 也不支持转义符，双引号中可引用其他变量和转义符。，即单引号中的一切都视为字符串。
+- 将变量改为只读变量。`readonly <变量>`. 指读变量不能被修改和删除。
+- 删除变量。`unset <变量>`. 以上两种情况都不需要加 "$" 符号。
+- 获取字符串的长度。`${#<变量>}`
+- 一个简单的脚本例子:
+
+```bash
+#!/bin/bash
+x='Hello World!'
+y='I am the King of the world!'
+
+echo $x $y
+echo "The length of the variavle x is ${#x}.  The length of variable y is ${#y}."
+
+unset x y
+echo $x $y
+
+```
+
+​	以上会输出两个字符串，并且输出他们的长度，然后删除这两个变量，然后再尝试输出会发现什么都输出不了。将代码保存为一个文件。test.sh  然后用命令 `chmod +x test.sh` 给他赋予执行权限。用第1种方式执行就直接输它的路径和文件名就可以执行。一定要输路径，因为它并不是系统自带的命令。如果就在当前文件夹也要输 ` ./test.sh` . 如果用第2种方式执行，就直接使用命令 `source test.sh` 或者 `. test.sh`
+
+- 如果要获取用户的输入，就要使用read命令。常见的用法是将输入直接赋予一个变量。`read <name>`
+
+- 在一个文件里 `$1`, 就表示第1个参数，在调用这个文件的时候可以同时传递参数。
+
+  - 例如
+
+    ```
+    name=$1
+    echo $name
+    
+    #然后在调用这个文件的时候。输入 source ./test.sh Nick, 这个参数就会被赋值。如果有多个参数会依次被赋值。
+    ```
+
+    
+
+- 如果用 `#` 开头的句子。在脚本里就是注释。
+- 这样定义的变量都是局部变量，关机后会消失。
+- 将命令的结果赋值给变量。`var=$(<command>)` . 例如 `user=$(whoami)` , `date=$(date)`, 或者 `whereami=$(pwd)`.
+- 如果想要每次开机直接调用一个函数，将函数定义在 `~/.profile` 文件中。
+- 子字符串。`${<string>:1:4} ` 代表了字符串的第二到第5个字符，因为是从0开始数的。
+- 查找字符串。 `$(expr index "$string" <xx>)` 从1开始查找xx出现的位置，如果指定了多个字母，先出现的字母为准。返回查找到的位置。
 
 ## 注意事项
 
