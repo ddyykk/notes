@@ -263,6 +263,13 @@
 - 显示目前的网络状况。`nmcli general status` 或者 `nmcli dev status`
 - 显示存在过的连接。`nmcli connection show`
 
+### 网络测速
+
+- 安装 `sudo apt install speedtest-cli`
+- 测速使用多线程模式 ` speedtest-cli`
+- 测速使用单线 ` speedtest-cli --single`
+- 使用有线网会测试到比wifi更高的网速
+
 ### New Zealand Ubuntu 下载镜像源, 解决下载失败问题
 
 - 使用文字编辑器编辑 ` sudo vim /etc/apt/sources.list`. 除了最后三个以外, 在服务器域名前加`nz.`。最后三个前面加 `security.`
