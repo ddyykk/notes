@@ -256,6 +256,11 @@
 
 - ` ls -l | grep "Aug" | sort +4n | more`. 符号 `|` 表示将前一个命令的结果传递到下一个命令. 这个命令的意思是, 列出当前目录的文件, 并且显示详细信息. 然后只显示其中含有 'Aug' 的行. 并且以第4列来排序 (文件大小). 并且对结果自动分页. 空格键为下一页, b 为上一页.
 
+### 查看系统信息
+
+- 使用neofetch. 安装: ` sudo apt install neofetch`
+- 使用: `neofetch`
+
 ###  nmcli 命令(Network-manager command line interface)
 
 - 跟网络用相关的可以全部用此命令。
