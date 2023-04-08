@@ -335,6 +335,18 @@ method = manual
 
 - 命令是 `gcc -o <输出可执行文件名> <代码文件>`
 
+### Linux 在笔记本上, 关上盖子不休眠并且关闭屏幕
+
+- 首先编辑以下文件
+
+- ```bash
+  sudo nano /etc/systemd/logind.conf
+  ```
+
+  - 将这一行 `#HandleLidSwitch=suspend` 改为`HandleLidSwitch=ignore`
+  - 然后运行 ` setterm --blank 1 --powerdown 2`
+  - 再运行 ` sudo systemctl restart systemd-logind.service`
+
 ## Linux 脚本
 
 - 脚本就是将一系列命令写在一个文件里执行。一般的脚本使用 .sh 扩展名, 但任意名字并不影响执行。
