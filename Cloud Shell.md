@@ -1,0 +1,30 @@
+## Cloud Shell 的功能(以Oracle为例)
+
+- Cloud Shell 可以管理所有的计算实例, 也可以存放脚本来自动化所有的主机和租用的服务
+- 命令行界面
+- 安装好 Git
+- SQL的社区客户端
+- 构建工具: Maven,Make
+- 配置工具:terraform, ansible
+- 文字编辑器: vim, nano, Emacs
+- Linux shell: bash, sh, tmux
+- Linux utilities: iputils, jq, wget, zip/unzip, tar
+- Python tools: pip, iPython
+- Typescript/Javascript support: node.js, NPM, nvm
+- Dock 引擎
+- oci-powershell-modules
+- Oracle的cloud shell还带有自动补全和自动建议命令参数的功能, 需要在互动模式下使用, 命令` oci -i`
+- 支持docker, 可以直接开箱即用
+- 支持以下编程语言
+  - Java including multiple versions of Oracle Java as well as GraalVM Enterprise JDK 17
+  - Python (2 and 3)
+  - Ruby
+  - Golang
+  - JavaScript/NodeJS
+  - C/C++ using gcc
+  - sh and bash scripts
+- 包含自己的SDK
+- 可以控制和切换Java版本
+- 可以使用Cloud Shell的右上角按钮来上传下载文件
+- 可以访问广域网络和自己的主机, 提供网络功能来访问互联网资源
+- 
