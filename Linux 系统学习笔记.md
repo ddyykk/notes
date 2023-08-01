@@ -124,7 +124,9 @@
 
 - 查找文件的位置 `whereis <文件>`
 
-- 磁盘剩余空间 `df`. `-k`用KB为单位, `-h`使用更易读的格式, `-a`显示所有文件系统。查看内存情况`free`. 查看系统运行状况, 类似于资源管理器` htop`, 如果一些老机器或者精简过的机器没有此命令则用` top`.
+- 磁盘剩余空间 `df`. `-k`用KB为单位, `-h`使用更易读的格式, `-a`显示所有文件系统, `-T`会显示文件系统
+
+- 查看内存情况`free`. 查看系统运行状况, 类似于资源管理器` htop`, 如果一些老机器或者精简过的机器没有此命令则用` top`.
 
 - 读取并执行文件中的命令。`source <file>`. 可省略为点`.`。
 
@@ -348,6 +350,17 @@ method = manual
   - 将这一行 `#HandleLidSwitch=suspend` 改为`HandleLidSwitch=ignore`
   - 然后运行 ` setterm --blank 1 --powerdown 2`
   - 再运行 ` sudo systemctl restart systemd-logind.service`
+
+### 在移动磁盘上存在LVM, 如何挂载到Linux
+
+- 首先要确保系统安装了LVM `sudo apt install lvm2`
+- 运行 `sudo vgscan`来找到所有的LVM, 看看需要的磁盘在不在这里 
+- 然后 `sudo vgchange -ay`来激活所有的LVM
+- 使用命令`sudo lvdisplay `来查看所有的LVM, 把需要用到的盘的 `lv path`记录下来
+- 如果有需要, 新建一个文件夹来当作挂载点
+- 使用命令来挂载 `sudo mount <LV_PATH> <path to mount point>`
+- 如果想要永久性的自动挂载, 就要更新 `/etc/fstab`文件, 将挂载点信息写入其中
+- 移除挂载: `sudo umount <LV_PATH>`
 
 ## Linux 脚本
 
