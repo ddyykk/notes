@@ -286,7 +286,7 @@
 ### 纯文字命令行下面的一些用法(非SSH或者Terminal)
 
 - 设置文字界面的字体大小. 安装 ` sudo apt install console-setup`. 然后运行 ` sudo dpkg-reconfigure console-setup`. 然后选 UTF-8, 字符集自动, 字体可以用 Terminus, 尺寸选最大.
-- 纯文字界面下也可以切换多个命令行(同时运行多个命令), 最多可以用6个. ` Crtl+Alt+(F1-F6)`
+- 纯文字界面下也可以切换多个命令行屏幕, 最多可以用6个. ` Crtl+Alt+(F1-F6)`
 
 ###  ssh的配置
 
@@ -361,6 +361,35 @@ method = manual
 - 使用命令来挂载 `sudo mount <LV_PATH> <path to mount point>`
 - 如果想要永久性的自动挂载, 就要更新 `/etc/fstab`文件, 将挂载点信息写入其中
 - 移除挂载: `sudo umount <LV_PATH>`
+
+### 安装zsh,或者类似的shell
+
+- 首先安装 `sudo apt install zsh`
+- 完成以后运行 `zsh`, 会出现配置助手, 按照提示配置即可.
+- 然后要想更好用, 就安装`Oh-my-zsh`. 这是一个用来管理zsh的开源框架. 直接在GitHub上找到安装链接, 记得要有下载软件wget或者curl, 命令`sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`
+- 安装完以后并不会自动运行, 要手动将系统默认的shell切换到zsh, 命令是 `chsh -s $(which zsh)`. `chsh`命令就是切换shell用的, 后面的参数是zsh的路径. 
+- 可以查看电脑上已经安装的shell `cat /etc/shells`
+- 切换以后可以在 `~/.zshrc`文件中指定theme, 具体方法在Oh-my-zsh的GitHub文档里面. Theme放在 `~/.Oh-my-zsh/theme/`里面.
+- Oh-my-zsh 有自己的命令 omz, 很多命令以这个为开始. 要更新设定, 命令是`omz reload`.
+- 它还带有很多快捷命令, 使用`alias`来查看.
+
+### 为Linux或者wsl更改dns
+
+- 有时会遇到域名无法解析的问题, 可能是Windows自动给wsl生成无效的dns, 可以手动更改dns的ip地址.
+
+- 先 `ping`一下目标网址, 如果不通就进行更改
+
+- 配置文件是 `sudo nano /etc/resolv.conf`
+
+- 在其中添加 需要的dns服务器如下: `nameserver 8.8.8.8`. 这个地址是Google的dns服务器, 比较可靠.
+
+- 如果在重启后失效, 说明Windows还在使用无效的dns, 就建立这个文件`/etc/resolv.conf`,在其中写入: 
+
+  ```bash
+  [network]
+  generateResolvConf = false
+
+​		这样就可以制止Windows自动生成无效的dns
 
 ## Linux 脚本
 
