@@ -13,8 +13,8 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Linux 系统学习笔记.md",
-                "mode": "source",
+                "file": "MongoDB的笔记.md",
+                "mode": "preview",
                 "source": false
               }
             }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Linux 系统学习笔记.md",
+                "file": "MongoDB的笔记.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Linux 系统学习笔记.md",
+                "file": "MongoDB的笔记.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,11 +125,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Linux 系统学习笔记.md"
+                "file": "MongoDB的笔记.md"
               }
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
@@ -146,11 +147,11 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "53cbe95ef8cc8eb3",
+  "active": "3a9a275448aa56ff",
   "lastOpenFiles": [
+    "Linux 系统学习笔记.md",
     "MySQL常用命令.md",
     "Vim使用.md",
-    "MongoDB的笔记.md",
-    "Linux 系统学习笔记.md"
+    "MongoDB的笔记.md"
   ]
 }

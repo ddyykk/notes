@@ -366,7 +366,7 @@ method = manual
 
 - 首先安装 `sudo apt install zsh`
 - 完成以后运行 `zsh`, 会出现配置助手, 按照提示配置即可.
-- 然后要想更好用, 就安装`Oh-my-zsh`. 这是一个用来管理zsh的开源框架. 直接在GitHub上找到安装链接, 记得要有下载软件wget或者curl, 命令`sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`
+- 然后要想更好用, 就安装`Oh-my-zsh`. 这是一个用来管理zsh的开源框架. 直接在GitHub上找到安装链接, 记得要有下载软件wget或者curl, 命令`sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`.但这个并不是必要的, oh-my-zsh也会拖慢shell运行的速度.
 - 安装完以后并不会自动运行, 要手动将系统默认的shell切换到zsh, 命令是 `chsh -s $(which zsh)`. `chsh`命令就是切换shell用的, 后面的参数是zsh的路径. 
 - 可以查看电脑上已经安装的shell `cat /etc/shells`
 - 切换以后可以在 `~/.zshrc`文件中指定theme, 具体方法在Oh-my-zsh的GitHub文档里面. Theme放在 `~/.Oh-my-zsh/theme/`里面.
@@ -392,6 +392,13 @@ method = manual
 ​		这样就可以制止Windows自动生成无效的dns
 ### 快速查看Linux系统状态
 - 可以安装 `neofetch`这个包, 安装完成以后 执行命令 `neofetch`即可, 不然要查看系统信息会很麻烦.
+### 在WSL2中使用systemd服务
+- 编辑文件 `sudo nano /etc/wsl.conf`, 在其中加入语句:
+	```bash
+	[boot]
+	systemd=true
+	```
+- 然后在Windows命令行使用命令 `wsl.exe --shutdown`, 关闭并且重启wsl,这样再开就会带有systemd了.
 
 ## Linux 脚本
 
