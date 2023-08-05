@@ -390,6 +390,8 @@ method = manual
   generateResolvConf = false
 
 ​		这样就可以制止Windows自动生成无效的dns
+### 快速查看Linux系统状态
+- 可以安装 `neofetch`这个包, 安装完成以后 执行命令 `neofetch`即可, 不然要查看系统信息会很麻烦.
 
 ## Linux 脚本
 
