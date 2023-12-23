@@ -13,9 +13,9 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "基于Java的后端笔记.md",
+                "file": "Git笔记.md",
                 "mode": "preview",
-                "source": false
+                "source": true
               }
             }
           }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "基于Java的后端笔记.md",
+                "file": "Git笔记.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "基于Java的后端笔记.md",
+                "file": "Git笔记.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "基于Java的后端笔记.md"
+                "file": "Git笔记.md"
               }
             }
           }
@@ -150,10 +150,13 @@
   },
   "active": "60f52773a20f3982",
   "lastOpenFiles": [
-    "2023-08-06.md",
-    "Vim使用.md",
+    "基于Java的后端笔记.md",
+    "基于node的后端笔记.md",
+    "Git笔记.md",
     "Linux 系统学习笔记.md",
+    "Vim使用.md",
+    "MySQL常用命令.md",
     "MongoDB的笔记.md",
-    "MySQL常用命令.md"
+    "2023-08-06.md"
   ]
 }

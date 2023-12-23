@@ -31,6 +31,13 @@
 
   - 要关闭自启动, 把 enable 换成 disable. 
 
+## docker中的image和container
+
+- 一般要先从image开始, 不管是下载还是自行打包, 得到的都是一个image(镜像), 然后dockers会使用镜像来构建一个具体的实例, 就是一个container(容器).
+- 一个镜像可以构建出多个container.
+- 运行过后的container就会一直存在, 可以反复运行.
+- 要删除image, 要确保使用这个image的container已经全部停止运行并且删除.
+
 ## Docker的使用
 
 - 装完以后可以运行常用命令:
@@ -69,7 +76,7 @@
 
 ### 自建第一个docker容器
 
-- 建立一个任意文件夹, 此处我建立了dockertest, 在文件夹中随意放入一个文本文件, 这里我放入test.txt,  里面有一些任意内容即可.
+- 建立一个文件夹, 此处我建立了dockertest, 在文件夹中随意放入一个文本文件, 这里我放入test.txt,  里面有一些任意内容即可.
 
 - 在dockertest文件夹下面建立Dockerfile文件: ` touch Dockerfile`, 记得D要大写. 文件中写入下列内容:
 
@@ -97,13 +104,13 @@
 
 - 然后使用命令 ` docker run johnson/first` 就可以看到 test.txt 的内容被输出了. 说明镜像的构建是成功的, 这个构建出来的镜像应该可以在所有的Linux电脑上运行, 无需安装任何我的电脑上的组件, 因为所有需要的组件理论上来说都被打包构建进入了镜像, 他的里面包含了所有需要的文件. 打包的镜像尺寸是78mb, 只是一个文件, 里面基本包含了一个Ubuntu的环境, 从这个角度来看还是很小的. 
 
-- 可以使用命令 ` docker run -it johnson/first bash` , 进入镜像的环境内部去查看里面的文件结构, 默认进去的目录就应该是我们指定的目录. 此处不能用 `docker exec`因为我们的镜像并没有在运行, 必须要开启新的镜像. 默认的镜像会在运行完默认命令后自动退出. 除非有某些进程会一直保留, 类似服务器或者bash这一类需要手动退出的.
+- 可以使用命令 ` docker run -it johnson/first bash` , 进入镜像的环境内部去查看里面的文件结构, 默认进去的目录就应该是我们指定的目录. 此处不能用 `docker exec`因为我们的容器并没有在运行, 必须要开启新的镜像. 默认的镜像会在运行完默认命令后自动退出. 除非有某些进程会一直保留, 类似服务器或者bash这一类需要手动退出的.
 
 - 在Dockerfile的写法里面, 默认的命令 CMD 应该是一个shell环境, 这样一运行容器就会进入一个shell环境, 而另一种写法就是 CMD 只有参数, 命令被写在 ENTRYPOINT 里面. 对于熟练掌握的人更倾向于这种写法. 因为可以在启动容器的时候替换掉 CMD 里面的参数(当 ENTRYPOINT 存在时, CMD 就会成为 ENTRYPOINT 的参数), 更加灵活. 常见的用法是默认的 ENTRYPOINT 会使用一个命令的 --help 参数输出帮助信息, 用户可以替换为自己的参数. 注意, 只有 docker run 在重新开启一个新的容器时才能附加参数去替代默认 CMD 内容, 已经建立的容器 用 docker start 就不能再去替换 CMD 的内容.
 
 - 向容器内添加文件或数据, 可以使用 ADD 或者 COPY, 但是一般还是 COPY 常见. ADD 用来将一个压缩文件自动解压到容器里面, COPY 不能做到这个. 如果要添加多个文件, 最好写多个 COPY 指令.
 
-- 最简单的Linux镜像是alpine, 一个拥有基本功能的Linux镜像可以作为Dockerfile的起始点, 只有5MB大小.
+- 最简单的Linux镜像是alpine, 一个拥有基本功能的Linux镜像可以作为Dockerfile的起始点, 只有5MB大小. 但是不推荐使用, 因为这个基础镜像缺乏很多功能.
 
 - 更新后的Dockerfile如下:
 
@@ -122,6 +129,24 @@
 - 还是利用上面的 Dockerfile , 先在主机的 ~/dockertest/ 目录下建立 2nd.txt , 内容随意, 然后使用如下命令运行容器: `docker run -it -v ~/dockertest/:/home/johnson/dockertest johnson ./2nd.txt`
 
   - 意思是运行时把主机的 ~/dockertest/ 目录映射到容器的 /home/johnson/dockertest 目录. 最后的参数是替代打开的文件为 2nd.txt 那么容器内就可以访问主机里面的内容.
+
+## 一个使用Docker 的案例: Vocechat
+
+- vocechat是一个可以自己部署的聊天服务器, 免费版支持最多20个用户, 客户端支持Android, iOS, 和网页版, 可以横跨多个平台使用, 非常灵活. 同时它使用Docker部署, 部署的文件极其轻量化, 对服务器要求极低. 我这次使用很老旧的Surface 2, Debian 系统来部署, 机器配置为 Atom cpu, 4G内存.
+
+  ### 安装服务器端
+
+  - ```shell
+    docker run -d --restart=always \
+      -p 3009:3000 \
+      --name vocechat-server \
+      -v ~/.vocechat-server/data:/home/vocechat-server/data \
+      privoce/vocechat-server:latest \
+    ```
+
+  - 以上就是使用Docker进行部署的命令, 非常简单. 其中服务器硬件端口为3009, 映射到了容器的3000端口上, 可以根据需求更改. 容器的名字参数也可以自行更改. -d参数为后台运行. 参数 -v 将服务器上的路径 `~/.vocechat-server`用作储存数据, 这样docker容器意外关闭也不会导致服务器数据丢失.
+
+  - 安装完毕后可以在浏览器访问 http://<serverIP>:3009 就可以开始使用. 也可以用任意反向代理工具, 例如frp将这个服务内网穿透到公网上使用. 官网也有各个客户端的下载地址, 在第一次访问的时候会被要求建立管理员账号, 随后就可以发布邀请链接.
 
 # docker-compose
 

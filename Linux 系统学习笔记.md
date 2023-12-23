@@ -86,7 +86,7 @@
 
 - 复制`cp <source> <destination>` 
 
-- 移动 /重命名 `mv <source> <destination>`如果两个路径一样，但是文件名不一样，就是重命名。
+- 移动 /重命名 `mv <source> <destination>`如果两个路径一样，但是文件名不一样，就是重命名。可以重命名目录.
 
 - 删除 `rm <file>` `-r`参数用来删除目录。这种方式只是标记为空白，并不实际擦除。如果要实际擦除 `shred <file>`
 
@@ -254,23 +254,44 @@
 
 - wget 默认下载到当前目录, 可以输入多个地址用空格隔开. 要制定输出目录要用 -O 参数.
 
+- `!$`指代上一个命令的最后一个参数, 在复用上一个命令的参数但是主命令要改变时很有用, 例如 `ls .ssh/` `cd .ssh`, 后一个就可以写成`cd !$`.
+
 ## 一些应用专题
 
 ### ls 应用案例
 
 - ` ls -l | grep "Aug" | sort +4n | more`. 符号 `|` 表示将前一个命令的结果传递到下一个命令. 这个命令的意思是, 列出当前目录的文件, 并且显示详细信息. 然后只显示其中含有 'Aug' 的行. 并且以第4列来排序 (文件大小). 并且对结果自动分页. 空格键为下一页, b 为上一页.
 
+### nano的一些使用方法
+
+- 保存:`ctrl+s`, 与Windows一样. 另存为才是`ctrl+o`
+- `ctrl+6`进入选择模式, 选择以后可以复制或者剪切 `(ctrl+k)`.
+- `alt+u`, undo
+- `alt+6`, 如果已经选中了内容就复制选中的, 没有选中就复制当前行.
+- `alt+/`跳到文件末尾, `alt+\`跳到文件开头. 
+- `ctrl+a`跳到行首, `ctrl+e`跳到行尾.
+- `alt+n`行号开关
+- `ctrl+r`, 然后`alt+f`在不关闭当前文件的情况下打开新文件. 可以在界面里面查找文件, 打开以后可以复制然后退出新文件, 粘贴到原来的文件.
+- `ctrl+u`粘贴
+- `ctrl+x`退出.
+
 ### 查看系统信息
 
 - 使用neofetch. 安装: ` sudo apt install neofetch`
 - 使用: `neofetch`
 
-###  nmcli 命令(Network-manager command line interface)
+### 设置系统时间
 
+- 一般有网络的情况下时间都是自动同步的, 使用`date`命令显示, 参数`-R`会显示具体的时区信息.
+- 如果时区错误就会导致时间错误, 修改时区使用命令` ln -sf /usr/share/zoneinfo/<你的时区> /etc/localtime`. 所处的时区可以在上面的路径看到, 填上去即可.
+
+###  nmcli 命令(Network-manager command line interface
+- 要先安装 `Network manager`
 - 跟网络用相关的可以全部用此命令。
 - 还有一个nmtui提供了一个图形界面。
 - 显示目前的网络状况。`nmcli general status` 或者 `nmcli dev status`
 - 显示存在过的连接。`nmcli connection show`
+- 关闭WiFi连接 `nmcli radio wifi off`
 
 ### 网络测速
 
@@ -282,6 +303,7 @@
 ### New Zealand Ubuntu 下载镜像源, 解决下载失败问题
 
 - 使用文字编辑器编辑 ` sudo vim /etc/apt/sources.list`. 除了最后三个以外, 在服务器域名前加`nz.`。最后三个前面加 `security.`
+- 如果是非Ubuntu系统, 可以找找对应的网址, 也是同样的文件修改方法.
 
 ### 纯文字命令行下面的一些用法(非SSH或者Terminal)
 
@@ -393,12 +415,26 @@ method = manual
 ### 快速查看Linux系统状态
 - 可以安装 `neofetch`这个包, 安装完成以后 执行命令 `neofetch`即可, 不然要查看系统信息会很麻烦.
 ### 在WSL2中使用systemd服务
+
+- WSL默认不适用systemd服务, 但是有些东西又依赖这个服务, 所以手动安装.
+
 - 编辑文件 `sudo nano /etc/wsl.conf`, 在其中加入语句:
 	```bash
 	[boot]
 	systemd=true
 	```
+	
 - 然后在Windows命令行使用命令 `wsl.exe --shutdown`, 关闭并且重启wsl,这样再开就会带有systemd了.
+
+### 端口被占用的简单解决办法
+
+- 使用命令`lsof -i :<port No.>`来查看是什么在占用端口, 同样会显示占用的程序名字和系统pid, 可以用`kill <pid>`命令关闭掉占用端口的程序. 
+
+### 在新部署的电脑上导入ssh key
+
+- 首先要安装一个软件: `sudo apt install -y ssh-import-id`. 这个软件在Ubuntu 22以后应该是自带的.
+- 然后将自己的public key放在GitHub的账户里.
+- 然后使用命令`ssh-import-id gh:<GitHub_username>`就可以导入public key, 下次就可以避免输密码.
 
 ## Linux 脚本
 
