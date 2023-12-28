@@ -148,6 +148,29 @@
 
   - 安装完毕后可以在浏览器访问 http://<serverIP>:3009 就可以开始使用. 也可以用任意反向代理工具, 例如frp将这个服务内网穿透到公网上使用. 官网也有各个客户端的下载地址, 在第一次访问的时候会被要求建立管理员账号, 随后就可以发布邀请链接.
 
+  ### 常用命令
+
+  - 停止服务`docker stop vocechat-server`
+
+  - 备份数据`cp -rf ~/.vocechat-server/data ~/.vocechat-server/backup`
+
+  - 升级dockers镜像
+
+    ```shell
+    docker stop vocechat-server
+    docker rm vocechat-server
+    docker pull privoce/vocechat-server:latest
+    
+    # 这里改为自己之前部署执行过的docker命令行
+    docker run -d --restart=always \
+      -p 3009:3000 \
+      --name vocechat-server \
+      -v ~/.vocechat-server/data:/home/vocechat-server/data \
+      privoce/vocechat-server:latest \
+    ```
+
+    
+
 # docker-compose
 
 - 容器启动时会运行默认命令, 对于多数镜像就是没有命令, 所以需要指定命令, 否则镜像运行完毕就会退出
