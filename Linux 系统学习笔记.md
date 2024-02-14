@@ -246,8 +246,6 @@
     #以a到g之间的字母开头的任意长度字符串。
     ```
 
-  - 
-
 - wget 默认下载到当前目录, 可以输入多个地址用空格隔开. 要制定输出目录要用 -O 参数.
 
 - `!$`指代上一个命令的最后一个参数, 在复用上一个命令的参数但是主命令要改变时很有用, 例如 `ls .ssh/` `cd .ssh`, 后一个就可以写成`cd !$`.
@@ -286,6 +284,20 @@
 
 - 方法四: 将程序注册为服务, 用systemd来管理.
 
+- 方法五: 使用tumx.
+### 压缩与解压缩
+- 最常见的压缩解压缩命令为`tar`
+- 他的常用参数:tar 的第一个选项参数必须是下列之一：
+  - -c, --create 创建一个新的压缩文件
+  - -x, --extract 从中提取文件
+  - -t, --list 列出文件内容
+- 剩下的常见参数和命令为: `tar -czvf <archive_name> <file_list>`, 参数c为创建新文件, z为使用压缩, 如果没有z参数就不压缩只是打包, v是显示处理过程, f是要指定压缩文件名. 最后的文件列表可以加入多个文件用空格分开, 也可以写入整个目录, 就会压缩整个目录. 压缩文件名一般后缀是`tar.gz`, 或者`tgz`.
+- 解压的命令是 `tar -xvf <file>`, 参数x为提取, v是显示过程信息, f为指定压缩包. 会解压在当前目录, 如果要解压到别的目录, 要用`-C` 参数附上路径. 例如 `tar -xvf archive.tar -C /opt/files`
+- 列出压缩包内容 `tar -tvf archive.tar`
+- 解压部分文件, 只需在解压命令后面加上需要解压的文件列表: `tar -xf archive.tar file1 file2`. 也可以解压目录.
+- 增加一个文件: `tar -rvf archive.tar newfile`
+- 删除一个文件: `tar --delete -f archive.tar file1`
+
 ### nano的一些使用方法
 
 - 保存:`ctrl+s`, 与Windows一样. 另存为才是`ctrl+o`
@@ -308,6 +320,14 @@
 
 - 一般有网络的情况下时间都是自动同步的, 使用`date`命令显示, 参数`-R`会显示具体的时区信息.
 - 如果时区错误就会导致时间错误, 修改时区使用命令` ln -sf /usr/share/zoneinfo/<你的时区> /etc/localtime`. 所处的时区可以在上面的路径看到, 填上去即可.
+
+### 查看系统温度
+
+-  安装 `sudo apt install lm-sensors`
+- 第一次运行之前要检测有哪些传感器`sudo sensors-detect`, 一路yes即可
+
+- 然后运行`sensors`即可给出所有温度传感器当前读数
+- 如果要持续观察, 配合watch命令: `watch sensors`, 会持续给出各个温度传感器的读数.
 
 ###  nmcli 命令(Network-manager command line interface
 - 要先安装 `Network manager`
@@ -338,13 +358,13 @@
 
 -  apt安装sshd。装完一般会自动启动，如果没有自动启动，手动启动的路径为 `/usr/sbin/sshd`
 
-- 安装完以后就可以在别的电脑使用账号密码登录。 `ssh <user>@<server>` 主机地址使用IP地址就可以。
+-  安装完以后就可以在别的电脑使用账号密码登录。 `ssh <user>@<server>` 主机地址使用IP地址就可以。
 
-- 登录后在`~/.ssh`目录下建立一个文件 `touch authorized_keys`, 然后用vim或者nano等编辑器将公钥粘贴进去即可无密码登录。这样服务端的配置就完成了。如果需要更多的配置可以去配置文件。里面可以禁用密码登录, 和更改登录的端口。建立客户机白名单黑名单等等。进行此类操作时，建议留一个自己备用的登录方法，以防无法登录的时候，作为补救手段，如果因为意外禁用掉了所有的登录方式，自己也无法登录到机器。
+-  登录后在`~/.ssh`目录下建立一个文件 `touch authorized_keys`, 然后用vim或者nano等编辑器将公钥粘贴进去即可无密码登录。这样服务端的配置就完成了。如果需要更多的配置可以去配置文件。里面可以禁用密码登录, 和更改登录的端口。建立客户机白名单黑名单等等。进行此类操作时，建议留一个自己备用的登录方法，以防无法登录的时候，作为补救手段，如果因为意外禁用掉了所有的登录方式，自己也无法登录到机器。
 
-- 初次在客户端无密码登录使用命令 `ssh -i <private_keyfile> <user>@<server>`
+-  初次在客户端无密码登录使用命令 `ssh -i <private_keyfile> <user>@<server>`
 
-- 在客户端进行配置，可以快速登录。在客户端的 `~/.ssh` 文件夹下建立 `config`文件，填写服务器信息。可以将服务器的名称和IP地址等存储在里面。
+-  在客户端进行配置，可以快速登录。在客户端的 `~/.ssh` 文件夹下建立 `config`文件，填写服务器信息。可以将服务器的名称和IP地址等存储在里面。
 
   ``` bash
   Host <host nick name>
@@ -352,8 +372,33 @@
   User <user name>
   Port <22> #默认端口22，如果没有修改服务器端的设置，此处可以省略。
   ```
-  
+
   保存完成以后，使用命令 `ssh <nick name>` 就可以登录。
+
+- 服务器端的配置可以使用命令`sudo nano /etc/ssh/sshd_config`修改.
+
+### Oracle服务器防火墙(iptables)设定
+
+- Ubuntu或者CentOS有可能内置了`iptables`, 新装好可能会阻挡一切非常见的网络流量. 使用命令` sudo iptables -L -n -v`查看当前所有过滤规则.
+
+- 命令` sudo iptables -A INPUT -p udp --dport 8387 -j ACCEPT`打开某个端口的输入网络流量, 其中协议udp可以更换为其他常用的, 例如tcp.
+
+- 还有一个比较危险的操作, flush网络`sudo iptables -F`, 删除所有防火墙规则.
+
+- 更改完毕以后要使用命令`sudo iptables-save > /etc/iptables/rules.v4` 来保存所有的规则, 不然重启后会消失.
+
+- 以上不管用的话使用下面的方法:
+
+- 编辑文件`nano /etc/iptables/rules.v4`
+
+- 添加需要的规则, 可以根据上下文来复制, 以下为tcp写法, 然后保存.
+
+  ```bash
+  -A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT
+  -A INPUT -p tcp -m state --state NEW -m tcp --dport 443 -j ACCEPT
+  ```
+
+- 运行`iptables-restore < /etc/iptables/rules.v4`可以保存.
 
 ### 配置内网固定IP
 
