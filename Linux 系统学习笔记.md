@@ -329,7 +329,7 @@
 - 然后运行`sensors`即可给出所有温度传感器当前读数
 - 如果要持续观察, 配合watch命令: `watch sensors`, 会持续给出各个温度传感器的读数.
 
-###  nmcli 命令(Network-manager command line interface
+###  nmcli 命令(Network-manager command line interface (Ubuntu上已经废止)
 - 要先安装 `Network manager`
 - 跟网络用相关的可以全部用此命令。
 - 还有一个nmtui提供了一个图形界面。
@@ -343,7 +343,26 @@
 - 测速使用多线程模式 ` speedtest-cli`
 - 测速使用单线 ` speedtest-cli --single`
 - 使用有线网会测试到比wifi更高的网速
-
+### Ubuntu下配置静态IP地址
+- Ubuntu默认使用`netplan`
+- 使用命令`sudo nano /etc/netplan/00-installer-config.yaml` 编辑网卡的配置文件:
+```yaml
+# This is the network config written by 'subiquity'
+network:
+  ethernets:
+    enp3s0:
+      routes:
+      - to: default
+        via: 192.168.3.1
+# this is the gateway
+      dhcp4: no
+      addresses: [192.168.3.156/24]
+      nameservers:
+        addresses: [192.168.3.1]
+        #this is dns
+  version: 2
+```
+- 根据上面的需要更改具体的地址, 注意网卡的名称要用`ip add`命令查看
 ### New Zealand Ubuntu 下载镜像源, 解决下载失败问题
 
 - 使用文字编辑器编辑 ` sudo vim /etc/apt/sources.list`. 除了最后三个以外, 在服务器域名前加`nz.`。最后三个前面加 `security.`

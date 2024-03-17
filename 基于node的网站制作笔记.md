@@ -1,6 +1,8 @@
+- node 是一个Javascript 的本地运行环境, 在他出现以前, Javascript只能在浏览器中运行. 然后有人用Chrome 的V8引擎写了一个可以本地运行的Javascript引擎就是node.
+
 ## 安装node
 
-- 可以下载安装包, linux也可以用apt来安装
+- 可以官网下载安装包, linux也可以用apt来安装
 - 验证安装 `node --version && npm --version`
 - 使用npm安装软件包有两种模式, 全局和当前文件夹, 如果不指定的话, 默认是安装在当前文件夹. 要全局安装要使用 `npm install -g`参数
 - 项目文件夹里面要包含`package.json`文件, 用来记录项目设置和属性, 项目需要的安装包也会在里面记录, 以后就可以用一个命令安装所有记录的软件包.
@@ -8,6 +10,10 @@
 - 初始化以后的文件夹, 如果要安装软件包, 并且希望软件包被加入`package.json`的列表的话, 安装就要使用`npm install --save <package name>` 或者 `npm -S <package name>`
 - 可以使用一个软件包`nodemon`, 可以在修改服务器文件后自动重启服务, 而无需每次手动操作. 可以全局安装或者本地安装, 这里采用全局安装. 安装以后, 启动服务器的命令就变成`nodemon app.js`. 如果使用本地安装, 那么不能在命令行里直接调用, 要使用脚本. 例如`npm start`
 - 使用`express`, 这个是node最受欢迎的后端框架, 使用`node install -S express`安装. 其中常见的函数有`express.get(),express.post(),express.put(),express.set()`
+
+## node 基本知识
+
+- node 默认使用非同步的线程来运行程序, 意味着一个线程可以服务多个程序, 带来更好的性能和更低的延迟. 非常适合于网络服务器后端这样的场景. 但是不适合于高负载大运算的场景, 例如本地大型程序, 需要处理大量数据或者大文件的场景.
 
 ## express的route
 
