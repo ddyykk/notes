@@ -5,6 +5,7 @@
 - 可以官网下载安装包, linux也可以用apt来安装
 - 验证安装 `node --version && npm --version`
 - 使用npm安装软件包有两种模式, 全局和当前文件夹, 如果不指定的话, 默认是安装在当前文件夹. 要全局安装要使用 `npm install -g`参数
+- 每个项目放在一个文件夹里面
 - 项目文件夹里面要包含`package.json`文件, 用来记录项目设置和属性, 项目需要的安装包也会在里面记录, 以后就可以用一个命令安装所有记录的软件包.
 - 如果新建项目, 可以在项目文件夹里面使用`npm init`初始化项目文件夹, 主要就是建立`package.json`文件, 过程会要求输入一些项目设置, 可以全部回车, 或者用`npm init -y`来初始化, 就会全部用默认的属性.
 - 初始化以后的文件夹, 如果要安装软件包, 并且希望软件包被加入`package.json`的列表的话, 安装就要使用`npm install --save <package name>` 或者 `npm -S <package name>`
@@ -14,7 +15,40 @@
 ## node 基本知识
 
 - node 默认使用非同步的线程来运行程序, 意味着一个线程可以服务多个程序, 带来更好的性能和更低的延迟. 非常适合于网络服务器后端这样的场景. 但是不适合于高负载大运算的场景, 例如本地大型程序, 需要处理大量数据或者大文件的场景.
+- 新建项目文件夹以后开始使用, 首先建立一个js文件: `app.js`, 命名不重要, 但是运行的时候要知道这个是程序的起点. 使用js文件是因为node全部都是围绕Javascript来写的. 默认的编辑器使用VS Code.
+- 在`app.js`里面写入如下的代码:
+```js
+function sayHello(name) {
+	console.log('Hello ' + name);
+}
 
+sayHello('Johnson');
+```
+- 保存以后使用命令行, 进入项目文件夹, 使用命令`node app.js` 就可以运行上面的程序.
+- node常用的四个模块(module), fs(file system), os, event, http. 在上面的例子中没有任何的引用语句就使用了console.log()这个函数. 说明console是一个全局对象(global object). 他的完整形式是`global.console.log()`. 但是如果在文件中定义一个变量, 那么他就不是全局变量, 在这个文件以外的代码是无法使用这个变量的. 如果要使用的话就要导出(export). 一个文件, 就被称为一个模块(module) .
+- 那么在同一路径下新建文件`logger.js` , 在其中写入一些用来模拟登录的代码:
+```JavaScript
+var url = 'http://mywebsite.io/log';
+
+function log(message) {
+	//HTTP request
+	console.log(message);
+}
+
+module.exports.log = log;
+module.exports.engPoint = url;
+//注意使用驼峰命名, 然后导出时可以进行重命名
+//这样导出的是一个object, 不是一个function. 如果要导出function就写:
+//module.exports = log;
+//调用的时候也就变为 logger('My message.');
+```
+- 然后在`app.js` 中, 导入的命令并不是`import`, 而是`require()`. 代码如下:
+```js
+const logger = require('./logger.js')
+//后缀名可省略, 但不省略更加清晰. 因为在同一文件夹下, 路径这样写就可以. 必须要一个变量来接收这个导入的模块. 但最好用const 不用 var, 不然可能会被意外更改.
+logger.log('My message.');
+
+```
 ## express的route
 
 ```JavaScript
