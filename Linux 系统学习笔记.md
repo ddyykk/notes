@@ -38,12 +38,14 @@
 ## 常用命令
 
 - `ls` (list)当前文件夹内容。可以加路径显示某个文件夹内容。`-a`参数可显示隐藏文件。`-l`参数可以显示更多信息。`ls -a -l`在很多时候可以简化为`ll`。`-h`, 文件大小以更大的单位显示。
-  
+
   - `ls -l`显示出前面10个字符为权限。例如: `-rwxr-xr--`以三个为一组一共9个，第1位为文件属性。`d`就是文件夹。`l`就是链接或者快捷方式。后面三个显示的为创建者，中间三个为创建者的同一用户组, 最后三个为其他用户。
   - 改变权限: `chmod`. 第1组用户代号为u(user)第2组为g(group)，第3组为o(other)。
   - 例如给第1组用户加读写和执行权限。`chmod u+rxw <文件名>`; 给第2组减去权限的命令: `chmod g-rw <文件名>`.依此类推。如果省略用户的话，默认就是给文件所有者的用户更改权限。
   - 常用的给某一个文件加上执行权限(往往是脚本文件)。`chmod +x <file>`
-  
+
+- `lspci`可以列出PCI设备, `lscpu`列出CPU参数, `lsblk`列出所有存储设备.
+
 - 改变文件的所有者。`chown <目标用户名或者ID> <文件名>`
 
 - 改变文件的用户组。`chgrp <目标用户名或者ID> <文件名>`
@@ -106,7 +108,7 @@
 - 远程登录其他Linux主机 `ssh -i <private key> <host name>@<address>`, 如果不需要使用密钥就去掉参数 `-i <private key>`，只写主机&地址，用密码登录即可。默认端口22。可使用参数`-P <端口号>`来更改登录的默认端口(在已知服务器端默认端口被更改的情况下)。
   - 生成新的密钥对 ` ssh -keygen -t rsa` . rsa为指定的加密方式。
   - 将自己的公钥写入远程主机的已授权客户端中 `ssh-copy-id <host>@<address>`
-  
+
 - 显示所有已安装的包`dpkg -l`, 或者 `sudo apt list --installed`
 
 - 显示所有进程`ps -e`参数 `-f` 为显示所有信息。
@@ -177,7 +179,7 @@
 
 - 路由持续追踪一个地址，可以探测链路的节点。` mtr <address>`
 
-- 在本地和远程主机之间传文件。需要使用ssh(命令里面的主机必须是可以进行ssh连接的)。` scp <source> <host>:<path>` . 如果远程路径里面也包含了文件名，就可以在复制的过程中重命名. `-r` 参数复制整个目录。把源和目标调换也可从远程复制到本地。`-P` (大写) 可以指定端口。`-C` (大写) 可以在复制的过程中启用压缩。
+- 在本地和远程主机之间传文件。需要使用ssh(命令里面的主机必须是可以进行ssh连接的)。` scp <source> <username@hostname>:<path>` . 如果远程路径里面也包含了文件名，就可以在复制的过程中重命名. `-r` 参数复制整个目录。把源和目标调换也可从远程复制到本地。`-P` (大写) 可以指定端口。`-C` (大写) 可以在复制的过程中启用压缩。也可以复制远端的文件到另一个远端机器. 不过两台机器要配置好ssh互相访问才行. 如果没有配置可以使用`-3`参数, 流量就会绕行发出命令的这台机器, 则无需配置两台远端机器互相的ssh.
 
 - 使用`rsync`传文件, 两台机器都要安装。Ubuntu默认包含这个软件。`rsync -a <source> <host>:<path>`. 参数 `-r` 表示复制文件夹。使用这个命令复制文件到远程机器，默认会跳过重复的文件，而scp不会，这个软件也要使用ssh。
 
@@ -203,9 +205,6 @@
 
 - 关闭蓝牙。`bluetoothctl power off`. 需要安装。
 
-- 挂载一个设备文件到指定的路径。`mount <device> <path>`. 先使用 `sudo fdisk -l` 命令查看磁盘设备信息以及分区名称，然后再挂载到指定目录。要查看已存在的挂载, ` mount -l`. 或者直接查看 `/etc/mtab`文件。
-  - 挂载的流程为首先插入磁盘，然后 `fdisk -l ` 查看磁盘地址。然后使用 `mount` 挂载。要移除挂载用 `umount <path>`.
-  
 - 重启控制台, 乱码的时候使用。`reset`
 
 - 显示一个软件包是否安装等信息。`apt show <package>`. 查看软件包安装位置。`dpkg -L <package>`
@@ -258,6 +257,64 @@
 ### ls 应用案例
 
 - ` ls -l | grep "Aug" | sort +4n | more`. 符号 `|` 表示将前一个命令的结果传递到下一个命令. 这个命令的意思是, 列出当前目录的文件, 并且显示详细信息. 然后只显示其中含有 'Aug' 的行. 并且以第4列来排序 (文件大小). 并且对结果自动分页. 空格键为下一页, b 为上一页.
+
+### 无需使用sudo的密码
+
+- `echo "%sudo ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/sudo`
+
+### 修改电源键的行为
+
+- 打开 `/etc/systemd/logind.conf` 配置文件
+- 查找有 `HandlePowerKey=poweroff` 的行
+- 如果行以 `#` 符号开头，请将其删除以启用设置
+- 使用以下选项之一替换 `poweroff` ： 					
+  - `poweroff`关闭计算机
+  - `reboot`重启系统
+  - `halt`启动系统停止
+
+### 移动硬盘或新加硬盘的挂载
+
+- 首先使用`fdisk -l`查看磁盘是否存在, 以及地址.
+
+- 然后使用`sudo mount <path> <mounting point>`来挂载, mounting point一般为一个空文件夹.
+
+- 如果挂载失败, 可能是没有格式化. 使用`sudo mkfs.ext4 <path>`来格式化. 然后再挂载.
+
+- 如果需要开机自动挂载而不是每次开机手动挂载, 就要将挂载命令写入`/etc/fstab`文件. 格式为`UUID=xxxxxxxxx <mounting point> <file system(ext4,fat32,ntfs)> defaults 1 1`, 每个参数之间用空格分开, 然后就会在开机的时候自动挂载.
+
+- 第一次手动挂载以后使用命令`blkid`来查看`UUID`, 也可以在`fstab`里面使用`fdisk`查看到的设备地址来代替`UUID`, 但是这个地址可能会变, 尤其是磁盘顺序发生变化的时候.
+
+- 第二种方式是使用`systemd`来自动挂载, 这种方式更加灵活.
+
+  - 在`/usr/lib/systemd/system/`新建以`.mount`结尾的文件.
+
+  - 写入以下内容
+
+  - ```bash
+    [linux]# cat /usr/lib/systemd/system/home-disk.mount
+    
+    [Unit]
+    Description=mount my disk
+    After=home.mount
+    
+    [Mount]
+    #What=UUID=xxxxxxxxxxxxxxxxxxx
+    #What=/dev/sdb2
+    #以上地址或者UUID二选一
+    Where=/home/user/Videos
+    #where就是挂载点, 自行修改
+    Type=ext4
+    Options=defaults
+    
+    [Install]
+    WantedBy=multi-user.target
+    ```
+
+  - 然后使用命令`sudo systemctl start home-disk.mount`测试, 成功以后应该能看到挂载成功的目录.
+
+  - 然后加入开机自启动`sudo systemctl enable home-disk.mount`
+
+  - 这样挂载失败了也不会有问题.
 
 ### 关于把一些需要长时间运行的程序放入后台
 
@@ -318,6 +375,11 @@
 
 - 使用neofetch. 安装: ` sudo apt install neofetch`
 - 使用: `neofetch`
+
+### 修改电脑名称
+
+- 先使用命令`hostnamectl status`来查看电脑的名称, 第一个static hostname就是电脑的主机名称
+- 使用命令`hostnamectl set-hostname <new name>`来设置新的名字, 要退出当前用户再登录才能看见
 
 ### 设置系统时间
 

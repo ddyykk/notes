@@ -19,7 +19,8 @@ title: 自己搭建一个聊天服务器
     docker run -d --restart=always \
       -p 3009:3000 \
       --name vocechat-server \
-      privoce/vocechat-server:latest
+      -v ~/.vocechat-server/data:/home/vocechat-server/data \
+      privoce/vocechat-server:latest \
     ```
     
     - 命令指定了本机的3009端口为对外开放的端口, 使用网址 `http://<本机ip>:3009/` 就可以使用. 首次使用会建立一个管理员账号并且生成邀请注册的链接和二维码. 但是目前只能在局域网内访问.
