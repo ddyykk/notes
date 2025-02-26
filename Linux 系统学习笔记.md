@@ -107,7 +107,7 @@
 
 - 远程登录其他Linux主机 `ssh -i <private key> <host name>@<address>`, 如果不需要使用密钥就去掉参数 `-i <private key>`，只写主机&地址，用密码登录即可。默认端口22。可使用参数`-P <端口号>`来更改登录的默认端口(在已知服务器端默认端口被更改的情况下)。
   - 生成新的密钥对 ` ssh -keygen -t rsa` . rsa为指定的加密方式。
-  - 将自己的公钥写入远程主机的已授权客户端中 `ssh-copy-id <host>@<address>`
+  - 将自己的公钥写入远程主机 `ssh-copy-id <host>@<address>`
 
 - 显示所有已安装的包`dpkg -l`, 或者 `sudo apt list --installed`
 
@@ -282,7 +282,7 @@
 
 - 如果需要开机自动挂载而不是每次开机手动挂载, 就要将挂载命令写入`/etc/fstab`文件. 格式为`UUID=xxxxxxxxx <mounting point> <file system(ext4,fat32,ntfs)> defaults 1 1`, 每个参数之间用空格分开, 然后就会在开机的时候自动挂载.
 
-- 第一次手动挂载以后使用命令`blkid`来查看`UUID`, 也可以在`fstab`里面使用`fdisk`查看到的设备地址来代替`UUID`, 但是这个地址可能会变, 尤其是磁盘顺序发生变化的时候.
+- 第一次手动挂载以后使用命令`blkid`来查看`UUID`, 也可以在`fstab`里面使用`fdisk`查看到的设备地址来代替`UUID`, 但是这个地址可能会变, 尤其是磁盘顺序发生变化的时候. 其中一个解决办法是在fstab里面加入延时参数:`UUID="962093AD209392BB" /home/jo ntfs x-systemd.device-timeout=30 0 0`, 这样就只会等待30秒, 超时就会放弃挂载.
 - 在一次断电以后, 系统提示外置硬盘无法挂载. 手动挂载提示`can’t read superblock`. 首先使用windows上的DiskGenius对磁盘错误扫描和尝试修复. 然后放在Linux上使用命令`mount -o ro,noload /dev/sda1 /home/........`来进行挂载就可以成功. 原因是superblock损坏. 但是这样损坏并未修复.
 	- 修复方法: superblock一般是有备份的, 使用命令`sudo mke2fs -n /dev/xxx`来查看
 	- 然后就会产生类似如下的信息:
@@ -333,12 +333,19 @@
   - 这样挂载失败了也不会有问题.
 ### 修复/屏蔽坏道
 - 使用命令`badblocks -sv -o badblocks.log /dev/sda`来扫描坏道
+
 - 扫描结束以后，再用e2fsck把坏道屏蔽
+
 - 命令: `e2fsck -l badblocks.log /dev/sda` 这个方案比较软，就是把扫描出来的坏道数据添加到文件系统的黑名单里，适合硬盘上已经有数据的情况。还有个方案比较硬，用badblocks往指定范围的区块上写入数据，写入失败时硬盘会自动重新映射，这个方案适合硬盘上没有数据的情况。
 	```
 	badblocks -wsv /dev/sda [END] [START]
 	```
+	
 - 注意`[END]`是结束区块编号，`[START]`是开始区块编号。
+
+### Linux下使用NTFS文件系统
+
+- 使用apt安装一个叫`ntfs-3g`的包, 即可以像使用其他文件系统一样使用ntfs.
 
 ### 关于把一些需要长时间运行的程序放入后台
 
@@ -495,7 +502,7 @@ network:
 
 - 更改完毕以后要使用命令`sudo iptables-save > /etc/iptables/rules.v4` 来保存所有的规则, 不然重启后会消失.
 
-- 以上不管用的话使用下面的方法:
+- 以上不管用的话使用下面的方法:`sudo iptables-save | sudo tee /etc/iptables/iptables.rules`, 不管用是因为sudo没有对第二个命令生效.
 
 - 编辑文件`nano /etc/iptables/rules.v4`
 
